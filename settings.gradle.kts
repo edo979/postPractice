@@ -23,3 +23,4 @@ rootProject.name = "Post Practice"
 include(":app")
 include(":domain")
 include(":data-repository")
+include(":data-remote")
