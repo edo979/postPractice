@@ -24,5 +24,5 @@ class GetPostsWithUsersUseCase(
     }
 
     object Request : UseCase.Request
-    data class Response(val data: List<PostWithUser>) : UseCase.Response
+    data class Response(val posts: List<PostWithUser>) : UseCase.Response
 }
