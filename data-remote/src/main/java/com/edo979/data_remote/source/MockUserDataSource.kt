@@ -7,8 +7,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
 
-class MockUserDataSource : UserDataSource {
+class MockUserDataSource @Inject constructor() : UserDataSource {
 
     override fun getUsers(): Flow<List<User>> = flow {
         delay(1000L)

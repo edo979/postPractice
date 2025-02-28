@@ -2,8 +2,10 @@ package com.edo979.presentation_post.list
 
 import com.edo979.domain.usecase.GetPostsWithUsersUseCase
 import com.edo979.presentation_common.state.CommonConverter
+import javax.inject.Inject
 
-class PostListConverter : CommonConverter<GetPostsWithUsersUseCase.Response, PostListModel>() {
+class PostListConverter @Inject constructor() :
+    CommonConverter<GetPostsWithUsersUseCase.Response, PostListModel>() {
 
     override fun convertSuccess(data: GetPostsWithUsersUseCase.Response): PostListModel =
         PostListModel(items = data.posts.map {

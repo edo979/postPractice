@@ -7,8 +7,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
 
-class MockPostDataSource : PostDataSource {
+class MockPostDataSource @Inject constructor() : PostDataSource {
 
     override fun getPosts(): Flow<List<Post>> = flow {
         delay(2000)
