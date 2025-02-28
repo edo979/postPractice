@@ -17,6 +17,9 @@ class PostListViewModel @Inject constructor(
     MviViewModel<PostListModel, UiState<PostListModel>, PostListUiAction, PostListUiSingleEvent>() {
 
     override fun initState(): UiState<PostListModel> = UiState.Loading
+    override fun uiStateFlowOnStart() {
+        submitAction(PostListUiAction.Load)
+    }
 
     override fun handleAction(action: PostListUiAction) {
         when (action) {
