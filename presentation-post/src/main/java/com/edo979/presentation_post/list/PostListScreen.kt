@@ -108,7 +108,7 @@ fun PostListScreen(posts: List<PostListItemModel>, onAction: (PostListUiAction) 
                     Box(modifier = Modifier.fillMaxSize()) {
                         when (pageIndex) {
                             0 -> {
-                                PostList(posts = posts)
+                                PostList(posts = posts, onPostClickAction = onAction)
                             }
 
                             1 -> {

@@ -1,5 +1,6 @@
 package com.edo979.presentation_post.list
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.edo979.domain.usecase.GetPostsWithUsersUseCase
 import com.edo979.presentation_common.state.MviViewModel
@@ -24,7 +25,7 @@ class PostListViewModel @Inject constructor(
     override fun handleAction(action: PostListUiAction) {
         when (action) {
             is PostListUiAction.Load -> loadPost()
-            is PostListUiAction.TabClick -> {}
+            is PostListUiAction.PostClick -> Log.d("myNav", action.postId.toString())
         }
     }
 

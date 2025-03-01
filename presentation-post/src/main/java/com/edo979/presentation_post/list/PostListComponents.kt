@@ -2,6 +2,7 @@ package com.edo979.presentation_post.list
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,18 +27,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PostList(posts: List<PostListItemModel>) {
+fun PostList(posts: List<PostListItemModel>, onPostClickAction: (PostListUiAction) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 12.dp),
         verticalArrangement = Arrangement.Top
     ) {
-        items(items = posts, key = { it.id }) {
+        items(items = posts, key = { it.id }) { item ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 12.dp)
+                    .clickable { onPostClickAction(PostListUiAction.PostClick(item.id)) }
             ) {
                 Column(
                     modifier = Modifier
@@ -45,12 +47,12 @@ fun PostList(posts: List<PostListItemModel>) {
                         .padding(24.dp)
                 ) {
                     Text(
-                        text = it.title,
+                        text = item.title,
                         style = MaterialTheme.typography.headlineSmall,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
-                    Text(text = it.author, style = MaterialTheme.typography.bodyLarge)
+                    Text(text = item.author, style = MaterialTheme.typography.bodyLarge)
                 }
             }
         }

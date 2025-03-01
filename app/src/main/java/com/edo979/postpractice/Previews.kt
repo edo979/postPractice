@@ -6,6 +6,7 @@ import com.edo979.postpractice.ui.theme.PostPracticeTheme
 import com.edo979.presentation_post.list.PostListItemModel
 import com.edo979.presentation_post.list.PostListModel
 import com.edo979.presentation_post.list.PostListScreen
+import com.edo979.presentation_post.single.SinglePostScreen
 
 private val postListState = PostListModel(
     items = (1..3).map {
@@ -23,5 +24,13 @@ private val postListState = PostListModel(
 private fun PostListScreenPreview() {
     PostPracticeTheme {
         PostListScreen(postListState.items, onAction = {})
+    }
+}
+
+@Preview
+@Composable
+private fun SinglePostScreenPreview() {
+    PostPracticeTheme {
+        SinglePostScreen()
     }
 }
