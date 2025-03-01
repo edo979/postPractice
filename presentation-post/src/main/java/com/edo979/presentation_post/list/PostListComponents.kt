@@ -1,5 +1,7 @@
 package com.edo979.presentation_post.list
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,9 +9,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,4 +57,26 @@ fun PostList(
             }
         }
     }
+}
+
+@Composable
+fun SearchBar(modifier: Modifier = Modifier) {
+    OutlinedTextField(modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 12.dp)
+        .background(
+            color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(100)
+        )
+        .minimumInteractiveComponentSize(), singleLine = true, leadingIcon = {
+        Icon(imageVector = Icons.Default.Search, contentDescription = null)
+    }, trailingIcon = {
+        AnimatedVisibility(visible = true) {
+            IconButton(onClick = {}) {
+                Icon(imageVector = Icons.Default.Clear, contentDescription = null)
+            }
+        }
+    },
+        value = "",
+        onValueChange = {}
+    )
 }

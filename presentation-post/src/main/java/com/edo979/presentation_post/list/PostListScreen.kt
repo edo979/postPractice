@@ -38,18 +38,19 @@ fun PostListScreen(posts: List<PostListItemModel>) {
 
     Column(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.primaryContainer)
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(top = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Search Bar")
+        SearchBar()
 
         Surface(
             modifier = Modifier
                 .padding(top = 32.dp)
                 .weight(1f)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background),
             shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {

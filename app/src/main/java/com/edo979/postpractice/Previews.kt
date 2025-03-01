@@ -18,7 +18,7 @@ private val postListState = PostListModel(
     }
 )
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun PostListScreenPreview() {
     PostPracticeTheme {
