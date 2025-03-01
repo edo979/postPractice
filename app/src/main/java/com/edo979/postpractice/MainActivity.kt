@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.edo979.postpractice.ui.theme.PostPracticeTheme
 import com.edo979.presentation_post.list.PostListScreen
+import com.edo979.presentation_post.list.PostListScreenRoot
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
             PostPracticeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Surface(modifier = Modifier.padding(innerPadding)) {
-                        PostListScreen(viewModel = hiltViewModel())
+                        PostListScreenRoot(viewModel = hiltViewModel())
                     }
                 }
             }
