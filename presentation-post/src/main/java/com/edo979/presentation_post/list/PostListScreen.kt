@@ -61,7 +61,7 @@ fun PostListScreen(posts: List<PostListItemModel>, onAction: (PostListUiAction) 
                 .padding(top = 32.dp)
                 .weight(1f)
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background),
+                .background(MaterialTheme.colorScheme.primaryContainer),
             shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
