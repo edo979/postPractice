@@ -1,5 +1,6 @@
 package com.edo979.presentation_post.list
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,10 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -26,27 +27,30 @@ import com.edo979.presentation_common.state.CommonScreen
 fun PostListScreenRoot(viewModel: PostListViewModel) {
     viewModel.uiStateFlow.collectAsState().value.let { state ->
         CommonScreen(state) {
-            Text(it.items[1].title)
+            PostListScreen(posts = it.items)
         }
     }
 }
 
 @Composable
-fun PostListScreen(postListModel: PostListModel) {
+fun PostListScreen(posts: List<PostListItemModel>) {
     val pagerState = rememberPagerState(0) { 2 }
 
     Column(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .fillMaxSize()
-            .statusBarsPadding(),
+            .padding(top = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("Search Bar")
 
         Surface(
             modifier = Modifier
+                .padding(top = 32.dp)
                 .weight(1f)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 TabRow(
@@ -59,7 +63,9 @@ fun PostListScreen(postListModel: PostListModel) {
                     Tab(
                         selected = true,
                         onClick = {},
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(vertical = 12.dp),
                     ) {
                         Text("First Tab")
                     }
@@ -73,7 +79,7 @@ fun PostListScreen(postListModel: PostListModel) {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
                 HorizontalPager(
                     state = pagerState,
@@ -81,13 +87,10 @@ fun PostListScreen(postListModel: PostListModel) {
                         .fillMaxWidth()
                         .weight(1f)
                 ) { page ->
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
+                    Box(modifier = Modifier.fillMaxSize()) {
                         when (page) {
                             0 -> {
-                                Text("First tab content")
+                                PostList(posts = posts)
                             }
 
                             1 -> {
