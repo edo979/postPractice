@@ -17,24 +17,35 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.edo979.presentation_common.state.CommonScreen
 
 @Composable
 fun PostListScreenRoot(viewModel: PostListViewModel) {
     viewModel.uiStateFlow.collectAsState().value.let { state ->
-        CommonScreen(state) {
-            PostListScreen(posts = it.items)
+        CommonScreen(state) { postListModel ->
+            PostListScreen(posts = postListModel.items, onAction = { viewModel.submitAction(it) })
         }
     }
 }
 
 @Composable
-fun PostListScreen(posts: List<PostListItemModel>) {
+fun PostListScreen(posts: List<PostListItemModel>, onAction: (PostListUiAction) -> Unit) {
+    var tabIndex by remember { mutableIntStateOf(0) }
     val pagerState = rememberPagerState(0) { 2 }
+
+    LaunchedEffect(tabIndex) {
+        pagerState.animateScrollToPage(tabIndex)
+    }
 
     Column(
         modifier = Modifier
@@ -55,28 +66,34 @@ fun PostListScreen(posts: List<PostListItemModel>) {
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 TabRow(
-                    selectedTabIndex = 0,
+                    selectedTabIndex = pagerState.currentPage,
                     modifier = Modifier
                         .padding(vertical = 12.dp)
                         .fillMaxWidth()
                 ) {
 
                     Tab(
-                        selected = true,
-                        onClick = {},
+                        selected = pagerState.currentPage == 0,
+                        onClick = { tabIndex = 0 },
                         modifier = Modifier
                             .weight(1f)
                             .padding(vertical = 12.dp),
                     ) {
-                        Text("First Tab")
+                        Text(
+                            text = "New Posts",
+                            fontWeight = if (pagerState.currentPage == 0) FontWeight.ExtraBold else FontWeight.Normal
+                        )
                     }
 
                     Tab(
-                        selected = false,
-                        onClick = {},
+                        selected = pagerState.currentPage == 1,
+                        onClick = { tabIndex = 1 },
                         modifier = Modifier.weight(1f),
                     ) {
-                        Text("Second Tab")
+                        Text(
+                            text = "Favorite Posts",
+                            fontWeight = if (pagerState.currentPage == 1) FontWeight.ExtraBold else FontWeight.Normal
+                        )
                     }
                 }
 
@@ -87,9 +104,9 @@ fun PostListScreen(posts: List<PostListItemModel>) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
-                ) { page ->
+                ) { pageIndex ->
                     Box(modifier = Modifier.fillMaxSize()) {
-                        when (page) {
+                        when (pageIndex) {
                             0 -> {
                                 PostList(posts = posts)
                             }

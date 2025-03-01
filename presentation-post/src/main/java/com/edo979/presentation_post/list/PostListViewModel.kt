@@ -24,7 +24,7 @@ class PostListViewModel @Inject constructor(
     override fun handleAction(action: PostListUiAction) {
         when (action) {
             is PostListUiAction.Load -> loadPost()
-            else -> Unit
+            is PostListUiAction.TabClick -> {}
         }
     }
 

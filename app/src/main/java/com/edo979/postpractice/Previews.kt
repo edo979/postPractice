@@ -22,6 +22,6 @@ private val postListState = PostListModel(
 @Composable
 private fun PostListScreenPreview() {
     PostPracticeTheme {
-        PostListScreen(postListState.items)
+        PostListScreen(postListState.items, onAction = {})
     }
 }
