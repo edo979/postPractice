@@ -67,15 +67,19 @@ fun SearchBar() {
         .background(
             color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(100)
         )
-        .minimumInteractiveComponentSize(), singleLine = true, leadingIcon = {
-        Icon(imageVector = Icons.Default.Search, contentDescription = null)
-    }, trailingIcon = {
-        AnimatedVisibility(visible = true) { // TODO: not visible is string empty!
-            IconButton(onClick = {}) {
-                Icon(imageVector = Icons.Default.Clear, contentDescription = null)
+        .minimumInteractiveComponentSize(),
+        shape = RoundedCornerShape(100),
+        singleLine = true,
+        leadingIcon = {
+            Icon(imageVector = Icons.Default.Search, contentDescription = null)
+        },
+        trailingIcon = {
+            AnimatedVisibility(visible = true) { // TODO: not visible is string empty!
+                IconButton(onClick = {}) {
+                    Icon(imageVector = Icons.Default.Clear, contentDescription = null)
+                }
             }
-        }
-    },
+        },
         value = "",
         onValueChange = {}
     )
