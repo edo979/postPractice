@@ -17,19 +17,21 @@ class MockPostDataSource @Inject constructor() : PostDataSource {
             (1..10).map {
                 Post(
                     id = it.toLong(),
-                    userId = 1L,
+                    userId = getUserId(it),
                     title = "title$it",
                     body = "body$it"
                 )
             })
     }.flowOn(Dispatchers.IO)
 
+    private fun getUserId(postId: Int) = if (postId < 5) 1L else 2L
+
     override fun getPost(id: Long): Flow<Post> = flow {
         delay(2000)
         emit(
             Post(
                 id = id,
-                userId = 1L,
+                userId = getUserId(id.toInt()),
                 title = "title$id",
                 body = "body1$id"
             )

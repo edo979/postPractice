@@ -25,7 +25,7 @@ class PostListViewModel @Inject constructor(
 
     override fun handleAction(action: PostListUiAction) {
         when (action) {
-            is PostListUiAction.Load -> loadPost()
+            is PostListUiAction.Load -> loadPosts()
             is PostListUiAction.PostClick -> submitSingleEvent(
                 PostListUiSingleEvent.OpenPostScreen(
                     NavRoutes.Post.routeForPost(PostRouteArg(action.postId))
@@ -34,7 +34,7 @@ class PostListViewModel @Inject constructor(
         }
     }
 
-    private fun loadPost() {
+    private fun loadPosts() {
         viewModelScope.launch {
             useCase.execute(GetPostsWithUsersUseCase.Request).map {
                 converter.convert(it)

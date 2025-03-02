@@ -9,10 +9,10 @@ class PostConverter @Inject constructor() :
 
     override fun convertSuccess(data: GetSinglePostWithUserUseCase.Response): PostModel =
         PostModel(
-            id = data.data.post.id,
-            author = data.data.user.username,
-            authorEmail = data.data.user.email,
-            title = data.data.post.title,
-            body = data.data.post.body
+            id = data.postWithUser.post.id,
+            author = data.postWithUser.user.username,
+            authorEmail = data.postWithUser.user.email,
+            title = data.postWithUser.post.title,
+            body = data.postWithUser.post.body
         )
 }

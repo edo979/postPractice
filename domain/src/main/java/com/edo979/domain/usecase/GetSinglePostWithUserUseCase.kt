@@ -13,7 +13,9 @@ class GetSinglePostWithUserUseCase(
     configuration: Configuration,
     private val postRepository: PostRepository,
     private val userRepository: UserRepository
-) : UseCase<GetSinglePostWithUserUseCase.Request, GetSinglePostWithUserUseCase.Response>(configuration) {
+) : UseCase<GetSinglePostWithUserUseCase.Request, GetSinglePostWithUserUseCase.Response>(
+    configuration
+) {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun process(request: Request): Flow<Response> =
@@ -24,5 +26,5 @@ class GetSinglePostWithUserUseCase(
         }
 
     data class Request(val postId: Long) : UseCase.Request
-    data class Response(val data: PostWithUser) : UseCase.Response
+    data class Response(val postWithUser: PostWithUser) : UseCase.Response
 }
