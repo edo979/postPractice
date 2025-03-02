@@ -4,6 +4,7 @@ import com.edo979.domain.entity.UseCase
 import com.edo979.domain.repository.PostRepository
 import com.edo979.domain.repository.UserRepository
 import com.edo979.domain.usecase.GetPostsWithUsersUseCase
+import com.edo979.domain.usecase.GetSinglePostWithUserUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,4 +26,12 @@ class UseCaseModule {
         userRepository: UserRepository
     ): GetPostsWithUsersUseCase =
         GetPostsWithUsersUseCase(configuration, postRepository, userRepository)
+
+    @Provides
+    fun provideGetSinglePostWithUser(
+        configuration: UseCase.Configuration,
+        postRepository: PostRepository,
+        userRepository: UserRepository
+    ): GetSinglePostWithUserUseCase =
+        GetSinglePostWithUserUseCase(configuration, postRepository, userRepository)
 }

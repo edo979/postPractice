@@ -18,7 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.edo979.postpractice.ui.theme.PostPracticeTheme
 import com.edo979.presentation_common.navigation.NavRoutes
 import com.edo979.presentation_post.list.PostListScreenRoot
-import com.edo979.presentation_post.single.SinglePostScreen
+import com.edo979.presentation_post.single.PostScreenRoot
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,7 +49,7 @@ fun APP(navController: NavHostController) {
 
         composable(route = NavRoutes.Post.route, arguments = NavRoutes.Post.arguments) {
             val id = NavRoutes.Post.fromEntry(it).id
-            SinglePostScreen(postId = id)
+            PostScreenRoot(viewModel = hiltViewModel(), postId = id)
         }
     }
 }
