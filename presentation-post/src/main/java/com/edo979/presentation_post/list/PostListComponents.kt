@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PostList(posts: List<PostListItemModel>, onPostClickAction: (PostListUiAction) -> Unit) {
+fun PostList(posts: List<PostListItemModel>, onPostClick: (PostListUiAction) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -39,7 +39,7 @@ fun PostList(posts: List<PostListItemModel>, onPostClickAction: (PostListUiActio
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 12.dp)
-                    .clickable { onPostClickAction(PostListUiAction.PostClick(item.id)) }
+                    .clickable { onPostClick(PostListUiAction.PostClick(item.id)) }
             ) {
                 Column(
                     modifier = Modifier

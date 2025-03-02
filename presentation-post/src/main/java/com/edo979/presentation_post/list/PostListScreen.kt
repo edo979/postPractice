@@ -27,10 +27,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.edo979.presentation_common.state.CommonScreen
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun PostListScreenRoot(viewModel: PostListViewModel) {
+fun PostListScreenRoot(viewModel: PostListViewModel, navController: NavHostController) {
+
+    LaunchedEffect(Unit) {
+        viewModel.singleEventFlow.collectLatest { singleUiEventAction ->
+            when (singleUiEventAction) {
+                is PostListUiSingleEvent.OpenPostScreen -> navController.navigate(
+                    singleUiEventAction.navRoute
+                )
+            }
+        }
+    }
+
     viewModel.uiStateFlow.collectAsState().value.let { state ->
         CommonScreen(state) { postListModel ->
             PostListScreen(posts = postListModel.items, onAction = { viewModel.submitAction(it) })
@@ -108,7 +121,7 @@ fun PostListScreen(posts: List<PostListItemModel>, onAction: (PostListUiAction) 
                     Box(modifier = Modifier.fillMaxSize()) {
                         when (pageIndex) {
                             0 -> {
-                                PostList(posts = posts, onPostClickAction = onAction)
+                                PostList(posts = posts, onPostClick = onAction)
                             }
 
                             1 -> {

@@ -4,6 +4,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun SinglePostScreen() {
-    Text("Single")
+fun SinglePostScreen(postId: Long) {
+    Text("Single $postId")
 }

@@ -44,11 +44,12 @@ fun APP(navController: NavHostController) {
     NavHost(navController, startDestination = NavRoutes.Posts.route) {
 
         composable(route = NavRoutes.Posts.route) {
-            PostListScreenRoot(viewModel = hiltViewModel())
+            PostListScreenRoot(viewModel = hiltViewModel(), navController = navController)
         }
 
         composable(route = NavRoutes.Post.route, arguments = NavRoutes.Post.arguments) {
-            SinglePostScreen()
+            val id = NavRoutes.Post.fromEntry(it).id
+            SinglePostScreen(postId = id)
         }
     }
 }

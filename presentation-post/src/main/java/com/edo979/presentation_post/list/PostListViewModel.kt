@@ -1,8 +1,9 @@
 package com.edo979.presentation_post.list
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.edo979.domain.usecase.GetPostsWithUsersUseCase
+import com.edo979.presentation_common.navigation.NavRoutes
+import com.edo979.presentation_common.navigation.PostRouteArg
 import com.edo979.presentation_common.state.MviViewModel
 import com.edo979.presentation_common.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +26,11 @@ class PostListViewModel @Inject constructor(
     override fun handleAction(action: PostListUiAction) {
         when (action) {
             is PostListUiAction.Load -> loadPost()
-            is PostListUiAction.PostClick -> Log.d("myNav", action.postId.toString())
+            is PostListUiAction.PostClick -> submitSingleEvent(
+                PostListUiSingleEvent.OpenPostScreen(
+                    NavRoutes.Post.routeForPost(PostRouteArg(action.postId))
+                )
+            )
         }
     }
 
