@@ -1,6 +1,6 @@
 package com.edo979.data_remote.source
 
-import com.edo979.data_repository.data_source.UserDataSource
+import com.edo979.data_repository.data_source.remote.RemoteUserDataSource
 import com.edo979.domain.entity.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class MockUserDataSource @Inject constructor() : UserDataSource {
+class MockRemoteUserDataSource @Inject constructor() : RemoteUserDataSource {
 
     override fun getUsers(): Flow<List<User>> = flow {
         delay(1000L)

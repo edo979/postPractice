@@ -1,7 +1,7 @@
 package com.edo979.postpractice.injection
 
-import com.edo979.data_remote.source.MockPostDataSource
-import com.edo979.data_remote.source.MockUserDataSource
+import com.edo979.data_remote.source.MockRemotePostDataSource
+import com.edo979.data_remote.source.MockRemoteUserDataSource
 import com.edo979.data_repository.repository.PostRepositoryImpl
 import com.edo979.data_repository.repository.UserRepositoryImpl
 import com.edo979.domain.repository.PostRepository
@@ -16,10 +16,10 @@ import dagger.hilt.components.SingletonComponent
 class RepositoryModule {
 
     @Provides
-    fun providePostRepository(dataSource: MockPostDataSource): PostRepository =
+    fun providePostRepository(dataSource: MockRemotePostDataSource): PostRepository =
         PostRepositoryImpl(dataSource)
 
     @Provides
-    fun provideUserRepository(dataSource: MockUserDataSource): UserRepository =
+    fun provideUserRepository(dataSource: MockRemoteUserDataSource): UserRepository =
         UserRepositoryImpl(dataSource)
 }

@@ -4,7 +4,7 @@ import com.edo979.domain.entity.UseCase
 import com.edo979.domain.repository.PostRepository
 import com.edo979.domain.repository.UserRepository
 import com.edo979.domain.usecase.GetPostsWithUsersUseCase
-import com.edo979.domain.usecase.GetSinglePostWithUserUseCase
+import com.edo979.domain.usecase.GetPostWithUserWithIsFavoriteUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,6 +32,6 @@ class UseCaseModule {
         configuration: UseCase.Configuration,
         postRepository: PostRepository,
         userRepository: UserRepository
-    ): GetSinglePostWithUserUseCase =
-        GetSinglePostWithUserUseCase(configuration, postRepository, userRepository)
+    ): GetPostWithUserWithIsFavoriteUseCase =
+        GetPostWithUserWithIsFavoriteUseCase(configuration, postRepository, userRepository)
 }

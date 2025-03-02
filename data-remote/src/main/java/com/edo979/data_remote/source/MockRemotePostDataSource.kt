@@ -1,6 +1,6 @@
 package com.edo979.data_remote.source
 
-import com.edo979.data_repository.data_source.PostDataSource
+import com.edo979.data_repository.data_source.remote.RemotePostDataSource
 import com.edo979.domain.entity.Post
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class MockPostDataSource @Inject constructor() : PostDataSource {
+class MockRemotePostDataSource @Inject constructor() : RemotePostDataSource {
 
     override fun getPosts(): Flow<List<Post>> = flow {
         delay(2000)

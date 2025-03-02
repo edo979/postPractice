@@ -1,6 +1,6 @@
 package com.edo979.data_repository
 
-import com.edo979.data_repository.data_source.UserDataSource
+import com.edo979.data_repository.data_source.remote.RemoteUserDataSource
 import com.edo979.data_repository.repository.UserRepositoryImpl
 import com.edo979.domain.entity.User
 import kotlinx.coroutines.flow.first
@@ -13,8 +13,8 @@ import org.mockito.kotlin.whenever
 
 class UserRepositoryImplTest {
 
-    private val userDataSource = mock<UserDataSource>()
-    private val userRepository = UserRepositoryImpl(userDataSource)
+    private val remoteUserDataSource = mock<RemoteUserDataSource>()
+    private val userRepository = UserRepositoryImpl(remoteUserDataSource)
 
     @Test
     fun testGetUsers() = runTest {
@@ -23,7 +23,7 @@ class UserRepositoryImplTest {
                 id = 1L, name = "name", username = "username", email = "email"
             )
         )
-        whenever(userDataSource.getUsers()).thenReturn(flowOf(users))
+        whenever(remoteUserDataSource.getUsers()).thenReturn(flowOf(users))
 
         val result = userRepository.getUsers().first()
         Assert.assertEquals(result, users)
@@ -35,7 +35,7 @@ class UserRepositoryImplTest {
         val user = User(
             id = id, name = "name", username = "username", email = "email"
         )
-        whenever(userDataSource.getUser(id)).thenReturn(flowOf(user))
+        whenever(remoteUserDataSource.getUser(id)).thenReturn(flowOf(user))
 
         val result = userRepository.getUser(id).first()
         Assert.assertEquals(result, user)
