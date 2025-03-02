@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -53,8 +54,11 @@ fun PostScreen(post: PostModel) {
             .verticalScroll(scrollState)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            PostDataRow("author:", post.author)
-            PostDataRow("email:", post.authorEmail)
+            PostHeaderRow(": author", post.author)
+            PostHeaderRow(": email", post.authorEmail)
+
+            Spacer(modifier = Modifier.height(6.dp))
+
             Text(
                 text = "Single ${post.title}",
                 modifier = Modifier
@@ -70,7 +74,7 @@ fun PostScreen(post: PostModel) {
         ) {
             HorizontalDivider(
                 modifier = Modifier
-                    .padding(vertical = 32.dp)
+                    .padding(vertical = 44.dp)
                     .weight(1f),
                 thickness = 1.dp,
                 color = Color.LightGray
@@ -89,14 +93,14 @@ fun PostScreen(post: PostModel) {
 }
 
 @Composable
-fun PostDataRow(data: String, value: String) {
+fun PostHeaderRow(data: String, value: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.Bottom
     ) {
         Text(
-            text = value, style = MaterialTheme.typography.bodyMedium
+            text = value, style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.width(12.dp))
         Text(text = data, style = MaterialTheme.typography.titleMedium)
