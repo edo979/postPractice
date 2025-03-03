@@ -7,6 +7,6 @@ interface FavoritePostRepository {
 
     fun getPosts(): Flow<List<Post>>
     fun getPost(id: Long): Flow<Post?>
-    fun addPost(post: Post): Flow<Post>
-    fun deletePost(post: Post): Flow<Post>
+    fun addPost(post: Post): Flow<Unit>
+    fun deletePost(post: Post): Flow<Unit>
 }

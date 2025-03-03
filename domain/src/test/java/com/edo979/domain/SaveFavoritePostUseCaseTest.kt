@@ -21,7 +21,7 @@ class SaveFavoritePostUseCaseTest {
         val post = Post(
             id = 1L, userId = 1L, title = "Title", body = "Body"
         )
-        whenever(favoritePostRepository.addPost(post)).thenReturn(flowOf(post))
+        whenever(favoritePostRepository.addPost(post)).thenReturn(flowOf(Unit))
 
         val result = useCase.process(SaveFavoritePostUseCase.Request(post)).first()
 
