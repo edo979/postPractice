@@ -1,7 +1,7 @@
 package com.edo979.presentation_post.single
 
 import androidx.lifecycle.viewModelScope
-import com.edo979.domain.usecase.GetPostWithUserWithIsFavoriteUseCase
+import com.edo979.domain.usecase.GetPostUseCase
 import com.edo979.presentation_common.state.MviViewModel
 import com.edo979.presentation_common.state.UiSingleEvent
 import com.edo979.presentation_common.state.UiState
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostViewModel @Inject constructor(
-    private val useCase: GetPostWithUserWithIsFavoriteUseCase, private val converter: PostConverter
+    private val useCase: GetPostUseCase, private val converter: PostConverter
 ) : MviViewModel<PostModel, UiState<PostModel>, PostUiAction, UiSingleEvent>() {
 
     override fun initState(): UiState<PostModel> = UiState.Loading
@@ -27,7 +27,7 @@ class PostViewModel @Inject constructor(
 
     private fun loadPost(postId: Long) {
         viewModelScope.launch {
-            useCase.execute(GetPostWithUserWithIsFavoriteUseCase.Request(postId = postId)).map {
+            useCase.execute(GetPostUseCase.Request(postId = postId)).map {
                 converter.convert(it)
             }.collect {
                 submitState(it)
