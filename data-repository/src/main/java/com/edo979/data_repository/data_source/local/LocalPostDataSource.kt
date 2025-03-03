@@ -7,5 +7,6 @@ interface LocalPostDataSource {
 
     fun getPosts(): Flow<List<Post>>
     fun getPost(id: Long): Flow<Post?>
-    fun addPosts(posts: List<Post>)
+    suspend fun addPost(post: Post)
+    suspend fun deletePost(post: Post)
 }
