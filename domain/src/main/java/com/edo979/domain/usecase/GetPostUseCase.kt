@@ -7,6 +7,7 @@ import com.edo979.domain.repository.PostRepository
 import com.edo979.domain.repository.UserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
@@ -23,10 +24,14 @@ class GetPostUseCase(
     override fun process(request: Request): Flow<Response> =
         favoritePostRepository.getPost(request.postId).flatMapLatest { favoritePost ->
             when (favoritePost) {
-                null -> postRepository.getPost(request.postId).flatMapLatest { remotePost ->
-                    userRepository.getUser(remotePost.userId).map { user ->
-                        Response(PostWithData(remotePost, user, isFavorite = false))
-                    }
+                null -> postRepository.getPost(request.postId).map { remotePost ->
+                    Response(
+                        PostWithData(
+                            post = remotePost,
+                            user = userRepository.getUser(remotePost.userId).first(),
+                            isFavorite = false
+                        )
+                    )
                 }
 
                 else -> userRepository.getUser(favoritePost.userId).map { user ->
@@ -34,7 +39,6 @@ class GetPostUseCase(
                 }
             }
         }
-
 
     data class Request(val postId: Long) : UseCase.Request
     data class Response(val post: PostWithData) : UseCase.Response
