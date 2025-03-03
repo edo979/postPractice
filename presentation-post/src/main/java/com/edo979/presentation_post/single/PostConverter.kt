@@ -9,10 +9,10 @@ class PostConverter @Inject constructor() :
 
     override fun convertSuccess(data: GetPostWithUserWithIsFavoriteUseCase.Response): PostModel =
         PostModel(
-            id = data.postWithData.post.id,
-            author = data.postWithData.user.username,
-            authorEmail = data.postWithData.user.email,
-            title = data.postWithData.post.title,
-            body = data.postWithData.post.body
+            id = data.postWithUser.post.id,
+            author = data.postWithUser.user.username,
+            authorEmail = data.postWithUser.user.email,
+            title = data.postWithUser.post.title,
+            body = data.postWithUser.post.body
         )
 }

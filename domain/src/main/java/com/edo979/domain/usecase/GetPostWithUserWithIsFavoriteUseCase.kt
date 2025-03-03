@@ -1,6 +1,6 @@
 package com.edo979.domain.usecase
 
-import com.edo979.domain.entity.PostWithData
+import com.edo979.domain.entity.PostWithUser
 import com.edo979.domain.entity.UseCase
 import com.edo979.domain.repository.PostRepository
 import com.edo979.domain.repository.UserRepository
@@ -21,10 +21,10 @@ class GetPostWithUserWithIsFavoriteUseCase(
     override fun process(request: Request): Flow<Response> =
         postRepository.getPost(request.postId).flatMapLatest { post ->
             userRepository.getUser(post.userId).map { user ->
-                Response(PostWithData(post, user))
+                Response(PostWithUser(post, user))
             }
         }
 
     data class Request(val postId: Long) : UseCase.Request
-    data class Response(val postWithData: PostWithData) : UseCase.Response
+    data class Response(val postWithUser: PostWithUser) : UseCase.Response
 }

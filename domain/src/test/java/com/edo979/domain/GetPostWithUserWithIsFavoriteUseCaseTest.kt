@@ -1,7 +1,7 @@
 package com.edo979.domain
 
 import com.edo979.domain.entity.Post
-import com.edo979.domain.entity.PostWithData
+import com.edo979.domain.entity.PostWithUser
 import com.edo979.domain.entity.User
 import com.edo979.domain.repository.PostRepository
 import com.edo979.domain.repository.UserRepository
@@ -36,7 +36,7 @@ class GetPostWithUserWithIsFavoriteUseCaseTest {
         val result = useCase.process(GetPostWithUserWithIsFavoriteUseCase.Request(id)).first()
 
         Assert.assertEquals(
-            GetPostWithUserWithIsFavoriteUseCase.Response(PostWithData(post1, user1)),
+            GetPostWithUserWithIsFavoriteUseCase.Response(PostWithUser(post1, user1)),
             result
         )
     }

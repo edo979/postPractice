@@ -1,7 +1,7 @@
 package com.edo979.domain
 
 import com.edo979.domain.entity.Post
-import com.edo979.domain.entity.PostWithData
+import com.edo979.domain.entity.PostWithUser
 import com.edo979.domain.entity.User
 import com.edo979.domain.repository.PostRepository
 import com.edo979.domain.repository.UserRepository
@@ -41,10 +41,10 @@ class GetPostsWithUsersUseCaseTest {
         Assert.assertEquals(
             GetPostsWithUsersUseCase.Response(
                 listOf(
-                    PostWithData(post1, user1),
-                    PostWithData(post2, user1),
-                    PostWithData(post3, user2),
-                    PostWithData(post4, user2),
+                    PostWithUser(post1, user1),
+                    PostWithUser(post2, user1),
+                    PostWithUser(post3, user2),
+                    PostWithUser(post4, user2),
                 )
             ), response
         )
