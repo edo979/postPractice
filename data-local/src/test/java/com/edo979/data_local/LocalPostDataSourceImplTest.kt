@@ -12,6 +12,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 class LocalPostDataSourceImplTest {
@@ -48,5 +49,31 @@ class LocalPostDataSourceImplTest {
         whenever(postDao.getPosts()).thenReturn(flowOf(emptyList()))
         val result = localDataSource.getPosts().first()
         Assert.assertEquals(emptyList<PostWithUser>(), result)
+    }
+
+    @Test
+    fun testGetPost() = runTest {
+        whenever(postDao.getPost(id)).thenReturn(postEntity)
+        val result = localDataSource.getPost(id).first()
+        Assert.assertEquals(postWithUser, result)
+    }
+
+    @Test
+    fun testGetPostWhenNoPost() = runTest {
+        whenever(postDao.getPost(id)).thenReturn(null)
+        val result = localDataSource.getPost(id).first()
+        Assert.assertEquals(null, result)
+    }
+
+    @Test
+    fun testAddPost() = runTest {
+        localDataSource.addPost(postWithUser)
+        verify(postDao).addPost(postEntity)
+    }
+
+    @Test
+    fun testDeletePost() = runTest {
+        localDataSource.deletePost(postWithUser)
+        verify(postDao).deletePost(postEntity)
     }
 }

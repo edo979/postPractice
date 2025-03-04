@@ -9,6 +9,7 @@ import com.edo979.domain.entity.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -20,13 +21,11 @@ class LocalPostDataSourceImpl @Inject constructor(private val postDao: PostDao) 
         postDao.getPosts().map { posts -> posts.map(::toDomainEntity) }
 
     override fun getPost(id: Long): Flow<PostWithUser?> = flow {
-        withContext(Dispatchers.IO) {
-            val postEntity = postDao.getPost(id)
-            val post = postEntity?.let(::toDomainEntity)
+        val postEntity = postDao.getPost(id)
+        val post = postEntity?.let(::toDomainEntity)
 
-            emit(post)
-        }
-    }
+        emit(post)
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun addPost(post: PostWithUser) = withContext(Dispatchers.IO) {
         val postEntity = toDataEntity(post)
