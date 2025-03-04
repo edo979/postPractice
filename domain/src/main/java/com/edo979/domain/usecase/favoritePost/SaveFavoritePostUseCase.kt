@@ -1,6 +1,6 @@
 package com.edo979.domain.usecase.favoritePost
 
-import com.edo979.domain.entity.Post
+import com.edo979.domain.entity.PostWithUser
 import com.edo979.domain.entity.UseCase
 import com.edo979.domain.repository.FavoritePostRepository
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +15,6 @@ class SaveFavoritePostUseCase(
     override fun process(request: Request): Flow<Response> =
         favoritePostRepository.addPost(request.post).map { Response }
 
-    data class Request(val post: Post) : UseCase.Request
+    data class Request(val post: PostWithUser) : UseCase.Request
     object Response : UseCase.Response
 }

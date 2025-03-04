@@ -10,6 +10,7 @@ data class PostEntity(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "body") val body: String,
     @ColumnInfo(name = "user_id") val userId: Long,
-    @ColumnInfo(name = "author") val author: String,
-    @ColumnInfo(name = "email") val authorEmail: String
+    @ColumnInfo(name = "author_name") val authorName: String,
+    @ColumnInfo(name = "author_username") val authorUsername: String,
+    @ColumnInfo(name = "author_email") val authorEmail: String
 )

@@ -9,6 +9,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 class GetPostUseCase(
@@ -34,9 +35,15 @@ class GetPostUseCase(
                     )
                 }
 
-                else -> userRepository.getUser(favoritePost.userId).map { user ->
-                    Response(PostWithData(favoritePost, user, isFavorite = true))
-                }
+                else -> flowOf(
+                    Response(
+                        PostWithData(
+                            favoritePost.post,
+                            favoritePost.user,
+                            isFavorite = true
+                        )
+                    )
+                )
             }
         }
 
