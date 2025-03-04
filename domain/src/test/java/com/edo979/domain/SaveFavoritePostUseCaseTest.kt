@@ -1,6 +1,8 @@
 package com.edo979.domain
 
 import com.edo979.domain.entity.Post
+import com.edo979.domain.entity.PostWithUser
+import com.edo979.domain.entity.User
 import com.edo979.domain.repository.FavoritePostRepository
 import com.edo979.domain.usecase.favoritePost.SaveFavoritePostUseCase
 import kotlinx.coroutines.flow.first
@@ -18,12 +20,16 @@ class SaveFavoritePostUseCaseTest {
 
     @Test
     fun testProcess() = runTest {
-        val post = Post(
-            id = 1L, userId = 1L, title = "Title", body = "Body"
+        val postWithUser = PostWithUser(
+            post = Post(
+                id = 1L, userId = 1L, title = "title", body = "body"
+            ), user = User(
+                id = 1L, name = "name", username = "username", email = "email@email.com"
+            )
         )
-        whenever(favoritePostRepository.addPost(post)).thenReturn(flowOf(Unit))
+        whenever(favoritePostRepository.addPost(postWithUser)).thenReturn(flowOf(Unit))
 
-        val result = useCase.process(SaveFavoritePostUseCase.Request(post)).first()
+        val result = useCase.process(SaveFavoritePostUseCase.Request(postWithUser)).first()
 
         Assert.assertEquals(SaveFavoritePostUseCase.Response, result)
     }

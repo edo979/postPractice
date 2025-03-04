@@ -2,6 +2,7 @@ package com.edo979.domain
 
 import com.edo979.domain.entity.Post
 import com.edo979.domain.entity.PostWithData
+import com.edo979.domain.entity.PostWithUser
 import com.edo979.domain.entity.User
 import com.edo979.domain.repository.FavoritePostRepository
 import com.edo979.domain.repository.PostRepository
@@ -32,11 +33,9 @@ class GetPostUseCaseTest {
         val id = 1L
         val user1 = User(id, "name1", "username1", "email1")
         val post1 = Post(1L, userId = id, "title1", "body1")
+        val postWithUser = PostWithUser(post = post1, user = user1)
 
-        whenever(postRepository.getPost(id)).thenReturn(flowOf(post1))
-        whenever(userRepository.getUser(id)).thenReturn(flowOf(user1))
-
-        whenever(favoritePostRepository.getPost(id)).thenReturn(flowOf(post1))
+        whenever(favoritePostRepository.getPost(id)).thenReturn(flowOf(postWithUser))
         val favoritePostResult = useCase.process(GetPostUseCase.Request(id)).first()
         Assert.assertEquals(
             GetPostUseCase.Response(PostWithData(post1, user1, true)),
@@ -44,6 +43,8 @@ class GetPostUseCaseTest {
         )
 
         whenever(favoritePostRepository.getPost(id)).thenReturn(flowOf(null))
+        whenever(postRepository.getPost(id)).thenReturn(flowOf(post1))
+        whenever(userRepository.getUser(id)).thenReturn(flowOf(user1))
         val result = useCase.process(GetPostUseCase.Request(id)).first()
         Assert.assertEquals(
             GetPostUseCase.Response(PostWithData(post1, user1, false)),
