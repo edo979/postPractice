@@ -2,8 +2,11 @@ package com.edo979.postpractice.injection
 
 import com.edo979.data_remote.source.MockRemotePostDataSource
 import com.edo979.data_remote.source.MockRemoteUserDataSource
+import com.edo979.data_repository.data_source.local.LocalPostDataSource
+import com.edo979.data_repository.repository.FavoritePostRepositoryImpl
 import com.edo979.data_repository.repository.PostRepositoryImpl
 import com.edo979.data_repository.repository.UserRepositoryImpl
+import com.edo979.domain.repository.FavoritePostRepository
 import com.edo979.domain.repository.PostRepository
 import com.edo979.domain.repository.UserRepository
 import dagger.Module
@@ -22,4 +25,8 @@ class RepositoryModule {
     @Provides
     fun provideUserRepository(dataSource: MockRemoteUserDataSource): UserRepository =
         UserRepositoryImpl(dataSource)
+
+    @Provides
+    fun provideFavoriteRepository(dataSource: LocalPostDataSource): FavoritePostRepository =
+        FavoritePostRepositoryImpl(dataSource)
 }
