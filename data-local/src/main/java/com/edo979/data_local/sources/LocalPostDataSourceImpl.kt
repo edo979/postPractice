@@ -30,7 +30,7 @@ class LocalPostDataSourceImpl @Inject constructor(private val postDao: PostDao) 
         emit(post)
     }
         .flowOn(Dispatchers.IO)
-        .catch { throw UseCaseException.PostException(it) }
+        .catch { throw UseCaseException.LocalPostException(it) }
 
     override suspend fun addPost(post: PostWithUser) = try {
         val postEntity = toDataEntity(post)

@@ -81,7 +81,7 @@ class LocalPostDataSourceImplTest {
     fun testGetPostThrowError() = runTest {
         whenever(postDao.getPost(id)).thenThrow(RuntimeException())
         localDataSource.getPost(id).catch {
-            Assert.assertTrue(it is UseCaseException.PostException)
+            Assert.assertTrue(it is UseCaseException.LocalPostException)
         }.collect()
     }
 
