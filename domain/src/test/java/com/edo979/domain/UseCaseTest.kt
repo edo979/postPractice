@@ -1,6 +1,6 @@
 package com.edo979.domain
 
-import com.edo979.domain.entity.UseCase
+import com.edo979.domain.usecase.UseCase
 import com.edo979.domain.entity.UseCaseException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

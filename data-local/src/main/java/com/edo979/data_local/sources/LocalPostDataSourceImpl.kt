@@ -5,36 +5,45 @@ import com.edo979.data_local.db.post.PostEntity
 import com.edo979.data_repository.data_source.local.LocalPostDataSource
 import com.edo979.domain.entity.Post
 import com.edo979.domain.entity.PostWithUser
+import com.edo979.domain.entity.UseCaseException
 import com.edo979.domain.entity.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class LocalPostDataSourceImpl @Inject constructor(private val postDao: PostDao) :
     LocalPostDataSource {
 
     override fun getPosts(): Flow<List<PostWithUser>> =
-        postDao.getPosts().map { posts -> posts.map(::toDomainEntity) }
+        postDao.getPosts()
+            .map { posts -> posts.map(::toDomainEntity) }
+            .catch { throw UseCaseException.LocalPostException(it) }
 
     override fun getPost(id: Long): Flow<PostWithUser?> = flow {
         val postEntity = postDao.getPost(id)
         val post = postEntity?.let(::toDomainEntity)
 
         emit(post)
-    }.flowOn(Dispatchers.IO)
+    }
+        .flowOn(Dispatchers.IO)
+        .catch { throw UseCaseException.PostException(it) }
 
-    override suspend fun addPost(post: PostWithUser) = withContext(Dispatchers.IO) {
+    override suspend fun addPost(post: PostWithUser) = try {
         val postEntity = toDataEntity(post)
         postDao.addPost(postEntity)
+    } catch (e: Exception) {
+        throw UseCaseException.LocalPostException(e)
     }
 
-    override suspend fun deletePost(post: PostWithUser) = withContext(Dispatchers.IO) {
+    override suspend fun deletePost(post: PostWithUser) = try {
         val postEntity = toDataEntity(post)
         postDao.deletePost(postEntity)
+    } catch (e: Exception) {
+        throw UseCaseException.LocalPostException(e)
     }
 
     private fun toDomainEntity(entity: PostEntity) = PostWithUser(

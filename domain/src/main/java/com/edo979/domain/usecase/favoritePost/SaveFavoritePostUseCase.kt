@@ -1,7 +1,7 @@
 package com.edo979.domain.usecase.favoritePost
 
 import com.edo979.domain.entity.PostWithUser
-import com.edo979.domain.entity.UseCase
+import com.edo979.domain.usecase.UseCase
 import com.edo979.domain.repository.FavoritePostRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

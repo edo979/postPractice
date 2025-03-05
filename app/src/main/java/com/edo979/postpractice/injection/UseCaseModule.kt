@@ -1,6 +1,6 @@
 package com.edo979.postpractice.injection
 
-import com.edo979.domain.entity.UseCase
+import com.edo979.domain.usecase.UseCase
 import com.edo979.domain.repository.PostRepository
 import com.edo979.domain.repository.UserRepository
 import com.edo979.domain.usecase.GetPostsWithUsersUseCase

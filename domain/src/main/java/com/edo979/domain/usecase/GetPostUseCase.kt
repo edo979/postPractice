@@ -1,7 +1,7 @@
 package com.edo979.domain.usecase
 
 import com.edo979.domain.entity.PostWithData
-import com.edo979.domain.entity.UseCase
+import com.edo979.domain.usecase.UseCase
 import com.edo979.domain.repository.FavoritePostRepository
 import com.edo979.domain.repository.PostRepository
 import com.edo979.domain.repository.UserRepository
