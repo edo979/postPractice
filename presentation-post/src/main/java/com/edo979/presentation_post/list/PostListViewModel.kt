@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostListViewModel @Inject constructor(
-    private val useCase: GetPostsWithUsersUseCase,
+    private val getPosts: GetPostsWithUsersUseCase,
     private val converter: PostListConverter
 ) :
     MviViewModel<PostListModel, UiState<PostListModel>, PostListUiAction, PostListUiSingleEvent>() {
@@ -36,7 +36,7 @@ class PostListViewModel @Inject constructor(
 
     private fun loadPosts() {
         viewModelScope.launch {
-            useCase.execute(GetPostsWithUsersUseCase.Request).map {
+            getPosts.execute(GetPostsWithUsersUseCase.Request).map {
                 converter.convert(it)
             }.collect {
                 submitState(it)

@@ -46,13 +46,20 @@ fun PostListScreenRoot(viewModel: PostListViewModel, navController: NavHostContr
 
     viewModel.uiStateFlow.collectAsState().value.let { state ->
         CommonScreen(state) { postListModel ->
-            PostListScreen(posts = postListModel.items, onAction = { viewModel.submitAction(it) })
+            PostListScreen(
+                posts = postListModel.items,
+                favoritePosts = postListModel.favoriteItems,
+                onAction = { viewModel.submitAction(it) })
         }
     }
 }
 
 @Composable
-fun PostListScreen(posts: List<PostListItemModel>, onAction: (PostListUiAction) -> Unit) {
+fun PostListScreen(
+    posts: List<PostListItemModel>,
+    favoritePosts: List<PostListItemModel>,
+    onAction: (PostListUiAction) -> Unit
+) {
     var tabIndex by remember { mutableIntStateOf(0) }
     val pagerState = rememberPagerState(0) { 2 }
 

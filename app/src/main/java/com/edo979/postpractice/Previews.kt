@@ -24,7 +24,7 @@ private val postListState = PostListModel(
 @Composable
 private fun PostListScreenPreview() {
     PostPracticeTheme {
-        PostListScreen(postListState.items, onAction = {})
+        PostListScreen(postListState.items, postListState.items, onAction = {})
     }
 }
 
@@ -33,7 +33,8 @@ private val post = PostModel(
     author = "author",
     authorEmail = "author@email.em",
     title = "Some Title for post",
-    body = "Body of a post"
+    body = "Body of a post",
+    isFavorite = true
 )
 
 @Preview

@@ -12,5 +12,5 @@ import dagger.hilt.components.SingletonComponent
 abstract class LocalDataSourceModule {
 
     @Binds
-    abstract fun bindLocalPostDataSource(postDataSourceImpl: LocalPostDataSourceImpl): LocalPostDataSource
+    abstract fun bindLocalPostDataSource(localPostDataSourceImpl: LocalPostDataSourceImpl): LocalPostDataSource
 }

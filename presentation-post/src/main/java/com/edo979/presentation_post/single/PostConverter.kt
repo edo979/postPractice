@@ -7,12 +7,16 @@ import javax.inject.Inject
 class PostConverter @Inject constructor() :
     CommonConverter<GetPostUseCase.Response, PostModel>() {
 
-    override fun convertSuccess(data: GetPostUseCase.Response): PostModel =
-        PostModel(
-            id = data.postWithUser.post.id,
-            author = data.postWithUser.user.username,
-            authorEmail = data.postWithUser.user.email,
-            title = data.postWithUser.post.title,
-            body = data.postWithUser.post.body
+    override fun convertSuccess(data: GetPostUseCase.Response): PostModel {
+        val (post, user, isFavorite) = data.post
+
+        return PostModel(
+            id = post.id,
+            author = user.name,
+            authorEmail = user.email,
+            title = post.title,
+            body = post.body,
+            isFavorite = isFavorite
         )
+    }
 }

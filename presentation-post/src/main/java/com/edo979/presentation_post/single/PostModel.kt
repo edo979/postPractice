@@ -5,5 +5,6 @@ data class PostModel(
     val author: String,
     val authorEmail: String,
     val title: String,
-    val body: String
+    val body: String,
+    val isFavorite: Boolean
 )

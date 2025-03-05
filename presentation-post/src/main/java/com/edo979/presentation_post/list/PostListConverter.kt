@@ -8,12 +8,22 @@ class PostListConverter @Inject constructor() :
     CommonConverter<GetPostsWithUsersUseCase.Response, PostListModel>() {
 
     override fun convertSuccess(data: GetPostsWithUsersUseCase.Response): PostListModel =
-        PostListModel(items = data.posts.map {
-            PostListItemModel(
-                id = it.post.id,
-                userId = it.post.userId,
-                author = it.user.name,
-                title = it.post.title
-            )
-        })
+        PostListModel(
+            items = data.posts.map {
+                PostListItemModel(
+                    id = it.post.id,
+                    userId = it.post.userId,
+                    author = it.user.name,
+                    title = it.post.title
+                )
+            },
+            favoriteItems = data.favoritePosts.map {
+                PostListItemModel(
+                    id = it.post.id,
+                    userId = it.post.userId,
+                    author = it.user.name,
+                    title = it.post.title
+                )
+            }
+        )
 }

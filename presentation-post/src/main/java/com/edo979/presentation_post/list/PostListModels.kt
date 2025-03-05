@@ -8,5 +8,6 @@ data class PostListItemModel(
 )
 
 data class PostListModel(
-    val items: List<PostListItemModel> = listOf()
+    val items: List<PostListItemModel> = listOf(),
+    val favoriteItems: List<PostListItemModel> = listOf()
 )

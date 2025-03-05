@@ -27,9 +27,15 @@ class UseCaseModule {
     fun provideGetPostsWithUsersUseCase(
         configuration: UseCase.Configuration,
         postRepository: PostRepository,
-        userRepository: UserRepository
+        userRepository: UserRepository,
+        favoritePostRepository: FavoritePostRepository
     ): GetPostsWithUsersUseCase =
-        GetPostsWithUsersUseCase(configuration, postRepository, userRepository)
+        GetPostsWithUsersUseCase(
+            configuration,
+            postRepository,
+            userRepository,
+            favoritePostRepository
+        )
 
     @Provides
     fun provideGetSinglePostWithUser(
@@ -40,12 +46,12 @@ class UseCaseModule {
     ): GetPostUseCase =
         GetPostUseCase(configuration, postRepository, favoritePostRepository, userRepository)
 
-    @Provides
-    fun provideGetFavoritePostUseCase(
-        configuration: UseCase.Configuration,
-        favoritePostRepository: FavoritePostRepository
-    ): GetFavoritePostsWithUsersUseCase =
-        GetFavoritePostsWithUsersUseCase(configuration, favoritePostRepository)
+//    @Provides
+//    fun provideGetFavoritePostUseCase(
+//        configuration: UseCase.Configuration,
+//        favoritePostRepository: FavoritePostRepository
+//    ): GetFavoritePostsWithUsersUseCase =
+//        GetFavoritePostsWithUsersUseCase(configuration, favoritePostRepository)
 
     @Provides
     fun getSaveFavoritePostUseCase(

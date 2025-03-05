@@ -45,6 +45,7 @@ dependencies {
     implementation(project(path = ":domain"))
     implementation(project(path = ":data-repository"))
     implementation(project(path = ":data-remote"))
+    implementation(project(path = ":data-local"))
     implementation(project(path = ":presentation-common"))
     implementation(project(path = ":presentation-post"))
 
