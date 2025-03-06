@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostViewModel @Inject constructor(
-    private val useCase: GetPostUseCase,
+    private val getPosUseCase: GetPostUseCase,
     private val savePostUseCase: SaveFavoritePostUseCase,
     private val converter: PostConverter
 ) : MviViewModel<PostModel, UiState<PostModel>, PostUiAction, UiSingleEvent>() {
@@ -34,7 +34,7 @@ class PostViewModel @Inject constructor(
 
     private fun loadPost(postId: Long) {
         viewModelScope.launch {
-            useCase.execute(GetPostUseCase.Request(postId = postId)).map {
+            getPosUseCase.execute(GetPostUseCase.Request(postId = postId)).map {
                 converter.convert(it)
             }.collect {
                 submitState(it)

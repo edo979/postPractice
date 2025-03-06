@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -85,7 +86,13 @@ fun PostScreen(post: PostModel, onSavePost: (PostUiAction) -> Unit) {
             IconButton(
                 modifier = Modifier.wrapContentWidth(Alignment.End),
                 onClick = { onSavePost(PostUiAction.SaveToFavorites(post)) }) {
-                Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = null)
+                when (post.isFavorite) {
+                    true -> Icon(imageVector = Icons.Default.Favorite, contentDescription = null)
+                    false -> Icon(
+                        imageVector = Icons.Default.FavoriteBorder,
+                        contentDescription = null
+                    )
+                }
             }
         }
 
