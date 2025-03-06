@@ -19,6 +19,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -47,9 +51,11 @@ fun PostListScreenRoot(
             PostListScreen(
                 posts = postListModel.items,
                 favoritePosts = postListModel.favoriteItems,
-                savedTabIndex = viewModel.tabIndex,
+                savedTabIndex = postListModel.tabIndex,
                 onNavigateToDetails = { viewModel.submitAction(it) },
-                onTabIndexChanged = { viewModel.tabIndex = it })
+                onTabIndexChanged = {
+                    viewModel.submitAction(PostListUiAction.TabIndexChanged(it))
+                })
         }
     }
 }
@@ -62,11 +68,16 @@ fun PostListScreen(
     onNavigateToDetails: (PostListUiAction) -> Unit,
     onTabIndexChanged: (Int) -> Unit
 ) {
-    //var tabIndex by remember { mutableIntStateOf(savedTabIndex) }
-    val pagerState = rememberPagerState(savedTabIndex) { 2 }
+    var tabIndex by remember { mutableIntStateOf(savedTabIndex) }
+    val pagerState = rememberPagerState(tabIndex) { 2 }
 
-    LaunchedEffect(savedTabIndex) {
-        pagerState.animateScrollToPage(savedTabIndex)
+    LaunchedEffect(tabIndex) {
+        pagerState.animateScrollToPage(tabIndex)
+        onTabIndexChanged(tabIndex)
+    }
+
+    LaunchedEffect(pagerState.currentPage) {
+        tabIndex = pagerState.currentPage
     }
 
     Column(
@@ -95,7 +106,7 @@ fun PostListScreen(
 
                     Tab(
                         selected = pagerState.currentPage == 0,
-                        onClick = { onTabIndexChanged(0) },
+                        onClick = { tabIndex = 0 },
                         modifier = Modifier
                             .weight(1f)
                             .padding(vertical = 12.dp),
@@ -108,7 +119,7 @@ fun PostListScreen(
 
                     Tab(
                         selected = pagerState.currentPage == 1,
-                        onClick = { onTabIndexChanged(1) },
+                        onClick = { tabIndex = 1 },
                         modifier = Modifier.weight(1f),
                     ) {
                         Text(
@@ -128,7 +139,6 @@ fun PostListScreen(
                     Box(modifier = Modifier.fillMaxSize()) {
                         when (pageIndex) {
                             0 -> {
-                                onTabIndexChanged(pageIndex)
                                 PostList(posts = posts, onPostClick = {
                                     onNavigateToDetails(
                                         PostListUiAction.PostClick(it)
@@ -137,7 +147,6 @@ fun PostListScreen(
                             }
 
                             1 -> {
-                                onTabIndexChanged(pageIndex)
                                 PostList(
                                     posts = favoritePosts, onPostClick = {
                                         onNavigateToDetails(

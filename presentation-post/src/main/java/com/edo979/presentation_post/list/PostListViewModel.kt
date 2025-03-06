@@ -1,5 +1,6 @@
 package com.edo979.presentation_post.list
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.edo979.domain.usecase.GetPostsWithUsersUseCase
@@ -23,13 +24,14 @@ class PostListViewModel @Inject constructor(
 
     var tabIndex: Int
         get() = savedStateHandle[TAB_INDEX_KEY] ?: 0
-        set(value) {
+        private set(value) {
             savedStateHandle[TAB_INDEX_KEY] = value
         }
 
     override fun initState(): UiState<PostListModel> = UiState.Loading
     override fun uiStateFlowOnStart() {
         submitAction(PostListUiAction.Load)
+        Log.d("tabs", tabIndex.toString())
     }
 
     override fun handleAction(action: PostListUiAction) {
@@ -40,6 +42,17 @@ class PostListViewModel @Inject constructor(
                     NavRoutes.Post.routeForPost(PostRouteArg(action.postId))
                 )
             )
+
+            is PostListUiAction.TabIndexChanged -> {
+                tabIndex = action.index
+                submitState(
+                    UiState.Success(
+                        (uiStateFlow.value as UiState.Success).data.copy(
+                            tabIndex = 1
+                        )
+                    )
+                )
+            }
         }
     }
 
