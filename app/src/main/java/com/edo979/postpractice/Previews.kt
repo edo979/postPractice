@@ -43,6 +43,6 @@ private val post = PostModel(
 @Composable
 private fun SinglePostScreenPreview() {
     PostPracticeTheme {
-        PostScreen(post, onSavePost = {})
+        PostScreen(post, toggleFavoritePost = {})
     }
 }

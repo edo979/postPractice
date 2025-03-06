@@ -3,6 +3,7 @@ package com.edo979.presentation_post.single
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.edo979.domain.usecase.GetPostUseCase
+import com.edo979.domain.usecase.favoritePost.DeleteFavoritePostUseCase
 import com.edo979.domain.usecase.favoritePost.SaveFavoritePostUseCase
 import com.edo979.presentation_common.state.MviViewModel
 import com.edo979.presentation_common.state.UiSingleEvent
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class PostViewModel @Inject constructor(
     private val getPosUseCase: GetPostUseCase,
     private val savePostUseCase: SaveFavoritePostUseCase,
+    private val deletePostUseCase: DeleteFavoritePostUseCase,
     private val converter: PostConverter
 ) : MviViewModel<PostModel, UiState<PostModel>, PostUiAction, UiSingleEvent>() {
 
@@ -29,6 +31,7 @@ class PostViewModel @Inject constructor(
         when (action) {
             is PostUiAction.Load -> loadPost(action.postId)
             is PostUiAction.SaveToFavorites -> savePost(action.post)
+            is PostUiAction.DeleteFromFavorites -> deletePost(action.post)
         }
     }
 
@@ -45,6 +48,16 @@ class PostViewModel @Inject constructor(
     private fun savePost(post: PostModel) {
         viewModelScope.launch {
             savePostUseCase.execute(SaveFavoritePostUseCase.Request(post.toDomain()))
+                .catch {
+                    Log.d("favoritePost", "error: $it")
+                }
+                .collect()
+        }
+    }
+
+    private fun deletePost(model: PostModel) {
+        viewModelScope.launch {
+            deletePostUseCase.execute(DeleteFavoritePostUseCase.Request(model.toDomain()))
                 .catch {
                     Log.d("favoritePost", "error: $it")
                 }

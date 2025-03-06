@@ -40,13 +40,13 @@ fun PostScreenRoot(viewModel: PostViewModel, postId: Long) {
         CommonScreen(state) { post ->
             PostScreen(
                 post,
-                onSavePost = { viewModel.submitAction(it) })
+                toggleFavoritePost = { viewModel.submitAction(it) })
         }
     }
 }
 
 @Composable
-fun PostScreen(post: PostModel, onSavePost: (PostUiAction) -> Unit) {
+fun PostScreen(post: PostModel, toggleFavoritePost: (PostUiAction) -> Unit) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -85,7 +85,12 @@ fun PostScreen(post: PostModel, onSavePost: (PostUiAction) -> Unit) {
             Spacer(modifier = Modifier.weight(0.05f))
             IconButton(
                 modifier = Modifier.wrapContentWidth(Alignment.End),
-                onClick = { onSavePost(PostUiAction.SaveToFavorites(post)) }) {
+                onClick = {
+                    when (post.isFavorite) {
+                        true -> toggleFavoritePost(PostUiAction.DeleteFromFavorites(post))
+                        false -> toggleFavoritePost(PostUiAction.SaveToFavorites(post))
+                    }
+                }) {
                 when (post.isFavorite) {
                     true -> Icon(imageVector = Icons.Default.Favorite, contentDescription = null)
                     false -> Icon(

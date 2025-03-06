@@ -10,7 +10,6 @@ import com.edo979.domain.entity.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -23,14 +22,11 @@ class LocalPostDataSourceImpl @Inject constructor(private val postDao: PostDao) 
             .map { posts -> posts.map(::toDomainEntity) }
             .catch { throw UseCaseException.LocalPostException(it) }
 
-    override fun getPost(id: Long): Flow<PostWithUser?> = flow {
-        val postEntity = postDao.getPost(id)
-        val post = postEntity?.let(::toDomainEntity)
-
-        emit(post)
-    }
-        .flowOn(Dispatchers.IO)
-        .catch { throw UseCaseException.LocalPostException(it) }
+    override fun getPost(id: Long): Flow<PostWithUser?> =
+        postDao.getPost(id)
+            .map { it?.let(::toDomainEntity) }
+            .flowOn(Dispatchers.IO)
+            .catch { throw UseCaseException.LocalPostException(it) }
 
     override suspend fun addPost(post: PostWithUser) = try {
         val postEntity = toDataEntity(post)
