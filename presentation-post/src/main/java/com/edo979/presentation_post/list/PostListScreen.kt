@@ -132,7 +132,7 @@ fun PostListScreen(
                             }
 
                             1 -> {
-                                Text("Second tab content")
+                                PostList(posts = favoritePosts, onPostClick = onAction)
                             }
                         }
                     }

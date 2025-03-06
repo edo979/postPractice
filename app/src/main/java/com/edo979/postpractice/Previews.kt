@@ -34,6 +34,8 @@ private val post = PostModel(
     authorEmail = "author@email.em",
     title = "Some Title for post",
     body = "Body of a post",
+    userName = "Username",
+    userId = 1L,
     isFavorite = true
 )
 
@@ -41,6 +43,6 @@ private val post = PostModel(
 @Composable
 private fun SinglePostScreenPreview() {
     PostPracticeTheme {
-        PostScreen(post)
+        PostScreen(post, onSavePost = {})
     }
 }

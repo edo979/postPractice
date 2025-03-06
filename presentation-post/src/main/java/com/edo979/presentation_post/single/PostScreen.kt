@@ -37,13 +37,15 @@ fun PostScreenRoot(viewModel: PostViewModel, postId: Long) {
 
     viewModel.uiStateFlow.collectAsState().value.let { state ->
         CommonScreen(state) { post ->
-            PostScreen(post)
+            PostScreen(
+                post,
+                onSavePost = { viewModel.submitAction(it) })
         }
     }
 }
 
 @Composable
-fun PostScreen(post: PostModel) {
+fun PostScreen(post: PostModel, onSavePost: (PostUiAction) -> Unit) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -80,7 +82,9 @@ fun PostScreen(post: PostModel) {
                 color = Color.LightGray
             )
             Spacer(modifier = Modifier.weight(0.05f))
-            IconButton(modifier = Modifier.wrapContentWidth(Alignment.End), onClick = {}) {
+            IconButton(
+                modifier = Modifier.wrapContentWidth(Alignment.End),
+                onClick = { PostUiAction.SaveToFavorites(post) }) {
                 Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = null)
             }
         }
