@@ -84,7 +84,7 @@ fun PostScreen(post: PostModel, onSavePost: (PostUiAction) -> Unit) {
             Spacer(modifier = Modifier.weight(0.05f))
             IconButton(
                 modifier = Modifier.wrapContentWidth(Alignment.End),
-                onClick = { PostUiAction.SaveToFavorites(post) }) {
+                onClick = { onSavePost(PostUiAction.SaveToFavorites(post)) }) {
                 Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = null)
             }
         }
