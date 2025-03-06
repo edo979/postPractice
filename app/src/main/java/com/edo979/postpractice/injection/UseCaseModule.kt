@@ -7,7 +7,6 @@ import com.edo979.domain.usecase.GetPostUseCase
 import com.edo979.domain.usecase.GetPostsWithUsersUseCase
 import com.edo979.domain.usecase.UseCase
 import com.edo979.domain.usecase.favoritePost.DeleteFavoritePostUseCase
-import com.edo979.domain.usecase.favoritePost.GetFavoritePostsWithUsersUseCase
 import com.edo979.domain.usecase.favoritePost.SaveFavoritePostUseCase
 import dagger.Module
 import dagger.Provides
@@ -45,13 +44,6 @@ class UseCaseModule {
         userRepository: UserRepository
     ): GetPostUseCase =
         GetPostUseCase(configuration, postRepository, favoritePostRepository, userRepository)
-
-//    @Provides
-//    fun provideGetFavoritePostUseCase(
-//        configuration: UseCase.Configuration,
-//        favoritePostRepository: FavoritePostRepository
-//    ): GetFavoritePostsWithUsersUseCase =
-//        GetFavoritePostsWithUsersUseCase(configuration, favoritePostRepository)
 
     @Provides
     fun getSaveFavoritePostUseCase(

@@ -12,7 +12,7 @@ import javax.inject.Inject
 class MockRemoteUserDataSource @Inject constructor() : RemoteUserDataSource {
 
     override fun getUsers(): Flow<List<User>> = flow {
-        delay(1000L)
+        delay(100L)
         emit(
             (1..2).map {
                 User(
@@ -26,7 +26,7 @@ class MockRemoteUserDataSource @Inject constructor() : RemoteUserDataSource {
     }.flowOn(Dispatchers.IO)
 
     override fun getUser(id: Long): Flow<User> = flow {
-        delay(1000L)
+        delay(100L)
         emit(
             User(
                 id = id,

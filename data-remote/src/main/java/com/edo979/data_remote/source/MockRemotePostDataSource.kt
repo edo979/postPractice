@@ -12,7 +12,7 @@ import javax.inject.Inject
 class MockRemotePostDataSource @Inject constructor() : RemotePostDataSource {
 
     override fun getPosts(): Flow<List<Post>> = flow {
-        delay(2000)
+        delay(800)
         emit(
             (1..10).map {
                 Post(
@@ -27,7 +27,7 @@ class MockRemotePostDataSource @Inject constructor() : RemotePostDataSource {
     private fun getUserId(postId: Int) = if (postId < 5) 1L else 2L
 
     override fun getPost(id: Long): Flow<Post> = flow {
-        delay(2000)
+        delay(800)
         emit(
             Post(
                 id = id,
