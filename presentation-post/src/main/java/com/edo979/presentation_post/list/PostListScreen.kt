@@ -19,10 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -32,7 +28,9 @@ import com.edo979.presentation_common.state.CommonScreen
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun PostListScreenRoot(viewModel: PostListViewModel, navController: NavHostController) {
+fun PostListScreenRoot(
+    viewModel: PostListViewModel, navController: NavHostController
+) {
 
     LaunchedEffect(Unit) {
         viewModel.singleEventFlow.collectLatest { singleUiEventAction ->
@@ -49,7 +47,9 @@ fun PostListScreenRoot(viewModel: PostListViewModel, navController: NavHostContr
             PostListScreen(
                 posts = postListModel.items,
                 favoritePosts = postListModel.favoriteItems,
-                onAction = { viewModel.submitAction(it) })
+                savedTabIndex = viewModel.tabIndex,
+                onNavigateToDetails = { viewModel.submitAction(it) },
+                onTabIndexChanged = { viewModel.tabIndex = it })
         }
     }
 }
@@ -57,22 +57,23 @@ fun PostListScreenRoot(viewModel: PostListViewModel, navController: NavHostContr
 @Composable
 fun PostListScreen(
     posts: List<PostListItemModel>,
+    savedTabIndex: Int,
     favoritePosts: List<PostListItemModel>,
-    onAction: (PostListUiAction) -> Unit
+    onNavigateToDetails: (PostListUiAction) -> Unit,
+    onTabIndexChanged: (Int) -> Unit
 ) {
-    var tabIndex by remember { mutableIntStateOf(0) }
-    val pagerState = rememberPagerState(0) { 2 }
+    //var tabIndex by remember { mutableIntStateOf(savedTabIndex) }
+    val pagerState = rememberPagerState(savedTabIndex) { 2 }
 
-    LaunchedEffect(tabIndex) {
-        pagerState.animateScrollToPage(tabIndex)
+    LaunchedEffect(savedTabIndex) {
+        pagerState.animateScrollToPage(savedTabIndex)
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(top = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(top = 32.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SearchBar()
 
@@ -94,7 +95,7 @@ fun PostListScreen(
 
                     Tab(
                         selected = pagerState.currentPage == 0,
-                        onClick = { tabIndex = 0 },
+                        onClick = { onTabIndexChanged(0) },
                         modifier = Modifier
                             .weight(1f)
                             .padding(vertical = 12.dp),
@@ -107,7 +108,7 @@ fun PostListScreen(
 
                     Tab(
                         selected = pagerState.currentPage == 1,
-                        onClick = { tabIndex = 1 },
+                        onClick = { onTabIndexChanged(1) },
                         modifier = Modifier.weight(1f),
                     ) {
                         Text(
@@ -120,19 +121,29 @@ fun PostListScreen(
                 Spacer(modifier = Modifier.height(6.dp))
 
                 HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier
+                    state = pagerState, modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
                 ) { pageIndex ->
                     Box(modifier = Modifier.fillMaxSize()) {
                         when (pageIndex) {
                             0 -> {
-                                PostList(posts = posts, onPostClick = onAction)
+                                onTabIndexChanged(pageIndex)
+                                PostList(posts = posts, onPostClick = {
+                                    onNavigateToDetails(
+                                        PostListUiAction.PostClick(it)
+                                    )
+                                })
                             }
 
                             1 -> {
-                                PostList(posts = favoritePosts, onPostClick = onAction)
+                                onTabIndexChanged(pageIndex)
+                                PostList(
+                                    posts = favoritePosts, onPostClick = {
+                                        onNavigateToDetails(
+                                            PostListUiAction.PostClick(it)
+                                        )
+                                    })
                             }
                         }
                     }

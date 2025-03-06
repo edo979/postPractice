@@ -1,5 +1,6 @@
 package com.edo979.presentation_post.list
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.edo979.domain.usecase.GetPostsWithUsersUseCase
 import com.edo979.presentation_common.navigation.NavRoutes
@@ -11,12 +12,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAB_INDEX_KEY = "tabIndex"
+
 @HiltViewModel
 class PostListViewModel @Inject constructor(
     private val getPosts: GetPostsWithUsersUseCase,
-    private val converter: PostListConverter
-) :
-    MviViewModel<PostListModel, UiState<PostListModel>, PostListUiAction, PostListUiSingleEvent>() {
+    private val converter: PostListConverter,
+    private val savedStateHandle: SavedStateHandle
+) : MviViewModel<PostListModel, UiState<PostListModel>, PostListUiAction, PostListUiSingleEvent>() {
+
+    var tabIndex: Int
+        get() = savedStateHandle[TAB_INDEX_KEY] ?: 0
+        set(value) {
+            savedStateHandle[TAB_INDEX_KEY] = value
+        }
 
     override fun initState(): UiState<PostListModel> = UiState.Loading
     override fun uiStateFlowOnStart() {
