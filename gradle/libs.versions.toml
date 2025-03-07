@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.2"
+agp = "8.9.0"
 kotlin = "2.0.21"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -21,6 +21,7 @@ moshi = "1.15.2"
 retrofit = "2.11.0"
 navigationCompose = "2.8.8"
 hiltNavigationCompose = "1.2.0"
+room = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -68,8 +69,14 @@ converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.r
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 
+#Room
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+
 [bundles]
 retrofit = ["okhttp", "retrofit", "converter-moshi", "moshi", "moshi-kotlin"]
+room = ["androidx-room-ktx", "androidx-room-runtime"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

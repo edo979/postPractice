@@ -32,7 +32,9 @@ import com.edo979.presentation_common.state.CommonScreen
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun PostListScreenRoot(viewModel: PostListViewModel, navController: NavHostController) {
+fun PostListScreenRoot(
+    viewModel: PostListViewModel, navController: NavHostController
+) {
 
     LaunchedEffect(Unit) {
         viewModel.singleEventFlow.collectLatest { singleUiEventAction ->
@@ -46,26 +48,43 @@ fun PostListScreenRoot(viewModel: PostListViewModel, navController: NavHostContr
 
     viewModel.uiStateFlow.collectAsState().value.let { state ->
         CommonScreen(state) { postListModel ->
-            PostListScreen(posts = postListModel.items, onAction = { viewModel.submitAction(it) })
+            PostListScreen(
+                posts = postListModel.items,
+                favoritePosts = postListModel.favoriteItems,
+                savedTabIndex = postListModel.tabIndex,
+                onNavigateToDetails = { viewModel.submitAction(it) },
+                onTabIndexChanged = {
+                    viewModel.submitAction(PostListUiAction.TabIndexChanged(it))
+                })
         }
     }
 }
 
 @Composable
-fun PostListScreen(posts: List<PostListItemModel>, onAction: (PostListUiAction) -> Unit) {
-    var tabIndex by remember { mutableIntStateOf(0) }
-    val pagerState = rememberPagerState(0) { 2 }
+fun PostListScreen(
+    posts: List<PostListItemModel>,
+    savedTabIndex: Int,
+    favoritePosts: List<PostListItemModel>,
+    onNavigateToDetails: (PostListUiAction) -> Unit,
+    onTabIndexChanged: (Int) -> Unit
+) {
+    var tabIndex by remember { mutableIntStateOf(savedTabIndex) }
+    val pagerState = rememberPagerState(tabIndex) { 2 }
 
     LaunchedEffect(tabIndex) {
         pagerState.animateScrollToPage(tabIndex)
+        onTabIndexChanged(tabIndex)
+    }
+
+    LaunchedEffect(pagerState.currentPage) {
+        tabIndex = pagerState.currentPage
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(top = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(top = 32.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SearchBar()
 
@@ -113,19 +132,27 @@ fun PostListScreen(posts: List<PostListItemModel>, onAction: (PostListUiAction) 
                 Spacer(modifier = Modifier.height(6.dp))
 
                 HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier
+                    state = pagerState, modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
                 ) { pageIndex ->
                     Box(modifier = Modifier.fillMaxSize()) {
                         when (pageIndex) {
                             0 -> {
-                                PostList(posts = posts, onPostClick = onAction)
+                                PostList(posts = posts, onPostClick = {
+                                    onNavigateToDetails(
+                                        PostListUiAction.PostClick(it)
+                                    )
+                                })
                             }
 
                             1 -> {
-                                Text("Second tab content")
+                                PostList(
+                                    posts = favoritePosts, onPostClick = {
+                                        onNavigateToDetails(
+                                            PostListUiAction.PostClick(it)
+                                        )
+                                    })
                             }
                         }
                     }

@@ -1,10 +1,13 @@
 package com.edo979.postpractice.injection
 
-import com.edo979.domain.entity.UseCase
+import com.edo979.domain.repository.FavoritePostRepository
 import com.edo979.domain.repository.PostRepository
 import com.edo979.domain.repository.UserRepository
+import com.edo979.domain.usecase.GetPostUseCase
 import com.edo979.domain.usecase.GetPostsWithUsersUseCase
-import com.edo979.domain.usecase.GetSinglePostWithUserUseCase
+import com.edo979.domain.usecase.UseCase
+import com.edo979.domain.usecase.favoritePost.DeleteFavoritePostUseCase
+import com.edo979.domain.usecase.favoritePost.SaveFavoritePostUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,15 +26,36 @@ class UseCaseModule {
     fun provideGetPostsWithUsersUseCase(
         configuration: UseCase.Configuration,
         postRepository: PostRepository,
-        userRepository: UserRepository
+        userRepository: UserRepository,
+        favoritePostRepository: FavoritePostRepository
     ): GetPostsWithUsersUseCase =
-        GetPostsWithUsersUseCase(configuration, postRepository, userRepository)
+        GetPostsWithUsersUseCase(
+            configuration,
+            postRepository,
+            userRepository,
+            favoritePostRepository
+        )
 
     @Provides
     fun provideGetSinglePostWithUser(
         configuration: UseCase.Configuration,
         postRepository: PostRepository,
+        favoritePostRepository: FavoritePostRepository,
         userRepository: UserRepository
-    ): GetSinglePostWithUserUseCase =
-        GetSinglePostWithUserUseCase(configuration, postRepository, userRepository)
+    ): GetPostUseCase =
+        GetPostUseCase(configuration, postRepository, favoritePostRepository, userRepository)
+
+    @Provides
+    fun getSaveFavoritePostUseCase(
+        configuration: UseCase.Configuration,
+        favoritePostRepository: FavoritePostRepository
+    ): SaveFavoritePostUseCase =
+        SaveFavoritePostUseCase(configuration, favoritePostRepository)
+
+    @Provides
+    fun provideDeleteFavoritePostUseCase(
+        configuration: UseCase.Configuration,
+        favoritePostRepository: FavoritePostRepository
+    ): DeleteFavoritePostUseCase =
+        DeleteFavoritePostUseCase(configuration, favoritePostRepository)
 }

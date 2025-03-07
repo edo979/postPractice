@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -37,13 +38,15 @@ fun PostScreenRoot(viewModel: PostViewModel, postId: Long) {
 
     viewModel.uiStateFlow.collectAsState().value.let { state ->
         CommonScreen(state) { post ->
-            PostScreen(post)
+            PostScreen(
+                post,
+                toggleFavoritePost = { viewModel.submitAction(it) })
         }
     }
 }
 
 @Composable
-fun PostScreen(post: PostModel) {
+fun PostScreen(post: PostModel, toggleFavoritePost: (PostUiAction) -> Unit) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -80,8 +83,21 @@ fun PostScreen(post: PostModel) {
                 color = Color.LightGray
             )
             Spacer(modifier = Modifier.weight(0.05f))
-            IconButton(modifier = Modifier.wrapContentWidth(Alignment.End), onClick = {}) {
-                Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = null)
+            IconButton(
+                modifier = Modifier.wrapContentWidth(Alignment.End),
+                onClick = {
+                    when (post.isFavorite) {
+                        true -> toggleFavoritePost(PostUiAction.DeleteFromFavorites(post))
+                        false -> toggleFavoritePost(PostUiAction.SaveToFavorites(post))
+                    }
+                }) {
+                when (post.isFavorite) {
+                    true -> Icon(imageVector = Icons.Default.Favorite, contentDescription = null)
+                    false -> Icon(
+                        imageVector = Icons.Default.FavoriteBorder,
+                        contentDescription = null
+                    )
+                }
             }
         }
 
