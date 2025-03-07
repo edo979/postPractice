@@ -3,6 +3,7 @@ package com.edo979.domain
 import com.edo979.domain.entity.Post
 import com.edo979.domain.entity.PostWithUser
 import com.edo979.domain.entity.User
+import com.edo979.domain.repository.FavoritePostRepository
 import com.edo979.domain.repository.PostRepository
 import com.edo979.domain.repository.UserRepository
 import com.edo979.domain.usecase.GetPostsWithUsersUseCase
@@ -18,10 +19,9 @@ class GetPostsWithUsersUseCaseTest {
 
     private val postRepository = mock<PostRepository>()
     private val userRepository = mock<UserRepository>()
+    private val favoritePostRepository = mock<FavoritePostRepository>()
     private val useCase = GetPostsWithUsersUseCase(
-        mock(),
-        postRepository,
-        userRepository
+        mock(), postRepository, userRepository, favoritePostRepository
     )
 
     @Test
@@ -35,16 +35,27 @@ class GetPostsWithUsersUseCaseTest {
 
         whenever(userRepository.getUsers()).thenReturn(flowOf(listOf(user1, user2)))
         whenever(postRepository.getPosts()).thenReturn(flowOf(listOf(post1, post2, post3, post4)))
+        whenever(favoritePostRepository.getPosts()).thenReturn(
+            flowOf(
+                listOf(
+                    PostWithUser(post1, user1),
+                    PostWithUser(post2, user1)
+                )
+            )
+        )
 
         val response = useCase.process(GetPostsWithUsersUseCase.Request).first()
 
         Assert.assertEquals(
             GetPostsWithUsersUseCase.Response(
-                listOf(
+                posts = listOf(
                     PostWithUser(post1, user1),
                     PostWithUser(post2, user1),
                     PostWithUser(post3, user2),
                     PostWithUser(post4, user2),
+                ), favoritePosts = listOf(
+                    PostWithUser(post1, user1),
+                    PostWithUser(post2, user1)
                 )
             ), response
         )

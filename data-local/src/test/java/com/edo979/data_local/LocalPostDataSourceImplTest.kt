@@ -65,21 +65,21 @@ class LocalPostDataSourceImplTest {
 
     @Test
     fun testGetPost() = runTest {
-        whenever(postDao.getPost(id)).thenReturn(postEntity)
+        whenever(postDao.getPost(id)).thenReturn(flowOf(postEntity))
         val result = localDataSource.getPost(id).first()
         Assert.assertEquals(postWithUser, result)
     }
 
     @Test
     fun testGetPostWhenNoPost() = runTest {
-        whenever(postDao.getPost(id)).thenReturn(null)
+        whenever(postDao.getPost(id)).thenReturn(flowOf(null))
         val result = localDataSource.getPost(id).first()
         Assert.assertEquals(null, result)
     }
 
     @Test
     fun testGetPostThrowError() = runTest {
-        whenever(postDao.getPost(id)).thenThrow(RuntimeException())
+        whenever(postDao.getPost(id)).thenReturn(flow { throw RuntimeException() })
         localDataSource.getPost(id).catch {
             Assert.assertTrue(it is UseCaseException.LocalPostException)
         }.collect()
