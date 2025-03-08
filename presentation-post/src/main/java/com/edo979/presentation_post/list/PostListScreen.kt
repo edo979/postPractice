@@ -51,7 +51,7 @@ fun PostListScreenRoot(
             PostListScreen(
                 posts = postListModel.items,
                 favoritePosts = postListModel.favoriteItems,
-                savedTabIndex = postListModel.tabIndex,
+                savedTabIndex = viewModel.tabIndex,
                 onAction = { viewModel.submitAction(it) }
             )
         }
