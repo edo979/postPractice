@@ -8,6 +8,8 @@ import com.edo979.presentation_common.navigation.NavRoutes
 import com.edo979.presentation_common.navigation.PostRouteArg
 import com.edo979.presentation_common.state.MviViewModel
 import com.edo979.presentation_common.state.UiState
+import com.edo979.presentation_common.state.UiState.*
+import com.edo979.presentation_post.list.PostListUiSingleEvent.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -38,7 +40,7 @@ class PostListViewModel @Inject constructor(
         when (action) {
             is PostListUiAction.Load -> loadPosts()
             is PostListUiAction.PostClick -> submitSingleEvent(
-                PostListUiSingleEvent.OpenPostScreen(
+                OpenPostScreen(
                     NavRoutes.Post.routeForPost(PostRouteArg(action.postId))
                 )
             )
@@ -46,13 +48,15 @@ class PostListViewModel @Inject constructor(
             is PostListUiAction.TabIndexChanged -> {
                 tabIndex = action.index
                 submitState(
-                    UiState.Success(
+                    Success(
                         (uiStateFlow.value as UiState.Success).data.copy(
                             tabIndex = 1
                         )
                     )
                 )
             }
+
+            is PostListUiAction.SearchQueryChanged -> TODO()
         }
     }
 

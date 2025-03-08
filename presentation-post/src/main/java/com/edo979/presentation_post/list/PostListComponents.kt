@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PostList(posts: List<PostListItemModel>, onPostClick: (Long) -> Unit) {
+fun PostList(posts: List<PostListItemModel>, onAction: (PostListUiAction) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -39,7 +39,7 @@ fun PostList(posts: List<PostListItemModel>, onPostClick: (Long) -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 12.dp)
-                    .clickable { onPostClick(item.id) }
+                    .clickable { onAction(PostListUiAction.PostClick(item.id)) }
             ) {
                 Column(
                     modifier = Modifier
@@ -61,13 +61,14 @@ fun PostList(posts: List<PostListItemModel>, onPostClick: (Long) -> Unit) {
 
 @Composable
 fun SearchBar() {
-    OutlinedTextField(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 12.dp)
-        .background(
-            color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(100)
-        )
-        .minimumInteractiveComponentSize(),
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp)
+            .background(
+                color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(100)
+            )
+            .minimumInteractiveComponentSize(),
         shape = RoundedCornerShape(100),
         singleLine = true,
         leadingIcon = {

@@ -52,10 +52,8 @@ fun PostListScreenRoot(
                 posts = postListModel.items,
                 favoritePosts = postListModel.favoriteItems,
                 savedTabIndex = postListModel.tabIndex,
-                onNavigateToDetails = { viewModel.submitAction(it) },
-                onTabIndexChanged = {
-                    viewModel.submitAction(PostListUiAction.TabIndexChanged(it))
-                })
+                onAction = { viewModel.submitAction(it) }
+            )
         }
     }
 }
@@ -65,15 +63,14 @@ fun PostListScreen(
     posts: List<PostListItemModel>,
     savedTabIndex: Int,
     favoritePosts: List<PostListItemModel>,
-    onNavigateToDetails: (PostListUiAction) -> Unit,
-    onTabIndexChanged: (Int) -> Unit
+    onAction: (PostListUiAction) -> Unit
 ) {
     var tabIndex by remember { mutableIntStateOf(savedTabIndex) }
     val pagerState = rememberPagerState(tabIndex) { 2 }
 
     LaunchedEffect(tabIndex) {
         pagerState.animateScrollToPage(tabIndex)
-        onTabIndexChanged(tabIndex)
+        onAction(PostListUiAction.TabIndexChanged(tabIndex))
     }
 
     LaunchedEffect(pagerState.currentPage) {
@@ -139,20 +136,12 @@ fun PostListScreen(
                     Box(modifier = Modifier.fillMaxSize()) {
                         when (pageIndex) {
                             0 -> {
-                                PostList(posts = posts, onPostClick = {
-                                    onNavigateToDetails(
-                                        PostListUiAction.PostClick(it)
-                                    )
-                                })
+                                PostList(posts = posts, onAction = onAction)
                             }
 
                             1 -> {
                                 PostList(
-                                    posts = favoritePosts, onPostClick = {
-                                        onNavigateToDetails(
-                                            PostListUiAction.PostClick(it)
-                                        )
-                                    })
+                                    posts = favoritePosts, onAction = onAction)
                             }
                         }
                     }
