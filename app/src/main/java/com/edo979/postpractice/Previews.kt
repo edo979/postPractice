@@ -22,6 +22,7 @@ private fun PostListScreenPreview() {
     PostPracticeTheme {
         PostListScreen(
             posts = postListState.items,
+            searchQuery = "",
             savedTabIndex = 0,
             favoritePosts = postListState.items,
             onAction = {}

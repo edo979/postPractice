@@ -60,7 +60,7 @@ fun PostList(posts: List<PostListItemModel>, onAction: (PostListUiAction) -> Uni
 }
 
 @Composable
-fun SearchBar() {
+fun SearchBar(searchQuery: String, onAction: (PostListUiAction) -> Unit) {
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
@@ -81,7 +81,7 @@ fun SearchBar() {
                 }
             }
         },
-        value = "",
-        onValueChange = {}
+        value = searchQuery,
+        onValueChange = { onAction(PostListUiAction.SearchQueryChanged(it)) }
     )
 }

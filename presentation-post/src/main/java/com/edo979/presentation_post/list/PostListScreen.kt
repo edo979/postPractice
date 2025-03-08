@@ -50,6 +50,7 @@ fun PostListScreenRoot(
         CommonScreen(state) { postListModel ->
             PostListScreen(
                 posts = postListModel.items,
+                searchQuery = postListModel.searchQuery,
                 favoritePosts = postListModel.favoriteItems,
                 savedTabIndex = viewModel.tabIndex,
                 onAction = { viewModel.submitAction(it) }
@@ -61,6 +62,7 @@ fun PostListScreenRoot(
 @Composable
 fun PostListScreen(
     posts: List<PostListItemModel>,
+    searchQuery: String,
     savedTabIndex: Int,
     favoritePosts: List<PostListItemModel>,
     onAction: (PostListUiAction) -> Unit
@@ -83,7 +85,7 @@ fun PostListScreen(
             .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(top = 32.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SearchBar()
+        SearchBar(searchQuery = searchQuery, onAction = onAction)
 
         Surface(
             modifier = Modifier
@@ -141,7 +143,8 @@ fun PostListScreen(
 
                             1 -> {
                                 PostList(
-                                    posts = favoritePosts, onAction = onAction)
+                                    posts = favoritePosts, onAction = onAction
+                                )
                             }
                         }
                     }

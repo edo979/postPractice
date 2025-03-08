@@ -10,7 +10,12 @@ import com.edo979.presentation_common.state.MviViewModel
 import com.edo979.presentation_common.state.UiState
 import com.edo979.presentation_post.list.PostListUiSingleEvent.OpenPostScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,10 +34,12 @@ class PostListViewModel @Inject constructor(
             savedStateHandle[TAB_INDEX_KEY] = value
         }
 
+    lateinit var cachedSuccessState: UiState.Success<PostListModel>
+
     override fun initState(): UiState<PostListModel> = UiState.Loading
     override fun uiStateFlowOnStart() {
         submitAction(PostListUiAction.Load)
-        Log.d("tabs", tabIndex.toString())
+        observeSearchQuery()
     }
 
     override fun handleAction(action: PostListUiAction) {
@@ -45,7 +52,7 @@ class PostListViewModel @Inject constructor(
             )
 
             is PostListUiAction.TabIndexChanged -> tabIndex = action.index
-            is PostListUiAction.SearchQueryChanged -> TODO()
+            is PostListUiAction.SearchQueryChanged -> searchPosts(action.query)
         }
     }
 
@@ -54,8 +61,42 @@ class PostListViewModel @Inject constructor(
             getPosts.execute(GetPostsWithUsersUseCase.Request).map {
                 converter.convert(it)
             }.collect {
+                if (it is UiState.Success) cachedSuccessState = it
                 submitState(it)
             }
+        }
+    }
+
+    private fun searchPosts(query: String) {
+        Log.d("searchQ", query)
+
+        // TODO: check if is the state success
+        submitState(
+            UiState.Success(
+                data = (uiStateFlow.value as UiState.Success).data.copy(
+                    searchQuery = query
+                )
+            )
+        )
+
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeSearchQuery() {
+        if (uiStateFlow.value is UiState.Success) {
+            uiStateFlow.map {
+                (it as UiState.Success).data.searchQuery
+            }.distinctUntilChanged().debounce(500L).onEach { query ->
+                when {
+                    query.isBlank() -> {
+                        submitState(cachedSuccessState)
+                    }
+
+                    query.length >= 2 -> {
+                        searchPosts(query)
+                    }
+                }
+            }.launchIn(viewModelScope)
         }
     }
 }
