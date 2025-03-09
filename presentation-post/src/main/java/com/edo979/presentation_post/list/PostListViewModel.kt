@@ -20,6 +20,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val TAB_INDEX_KEY = "tabIndex"
+val filterPost: PostListItemModel.(query: String) -> Boolean = { query ->
+    title.contains(query, ignoreCase = true) || body.contains(query, ignoreCase = true)
+}
 
 @HiltViewModel
 class PostListViewModel @Inject constructor(
@@ -61,55 +64,50 @@ class PostListViewModel @Inject constructor(
             getPosts.execute(GetPostsWithUsersUseCase.Request).map {
                 converter.convert(it)
             }.collect {
-                if (it is UiState.Success) cachedSuccessState = it
+                if (it is UiState.Success) {
+                    cachedSuccessState = if (::cachedSuccessState.isInitialized) UiState.Success(
+                        data = it.data.copy(
+                            searchQuery = (uiStateFlow.value as UiState.Success).data.searchQuery
+                        )
+                    )
+                    else it
+                }
+
                 submitState(it)
             }
         }
     }
 
-    private fun searchPosts(query: String) {
-        if (uiStateFlow.value !is UiState.Success) return
-
-        val currentState = (uiStateFlow.value as UiState.Success).data
-        val filterFunc: (PostListItemModel) -> Boolean = {
-            it.title.contains(query, ignoreCase = true) || it.body.contains(
-                query, ignoreCase = true
-            )
-        }
-
-        submitState(
-            UiState.Success(
-                data = currentState.copy(
-                    searchQuery = query,
-                    items = cachedSuccessState.data.items.filter(filterFunc),
-                    favoriteItems = cachedSuccessState.data.favoriteItems.filter(filterFunc)
-                )
-            )
-        )
-
-    }
-
     @OptIn(FlowPreview::class)
     private fun observeSearchQuery() {
-        uiStateFlow
-            .filter { it is UiState.Success }
-            .map {
-                (it as UiState.Success).data.searchQuery
-            }
-            .distinctUntilChanged()
-            .debounce(500L)
-            .onEach { query ->
-                when {
-                    query.isBlank() -> {
-                        submitState(cachedSuccessState)
-                    }
+        uiStateFlow.filter { it is UiState.Success }.map {
+            (it as UiState.Success).data.searchQuery
+        }.distinctUntilChanged().debounce(500L).onEach { query ->
 
-                    query.length >= 2 -> {
-                        searchPosts(query)
-                    }
+            when {
+                query.isBlank() -> {
+                    submitState(
+                        UiState.Success(
+                            data = cachedSuccessState.data.copy(searchQuery = query)
+                        )
+                    )
+                }
+
+                query.length >= 2 -> {
+                    submitState(
+                        UiState.Success(
+                            data = PostListModel(
+                                searchQuery = query,
+                                items = cachedSuccessState.data.items
+                                    .filter { it.filterPost(query) },
+                                favoriteItems = cachedSuccessState.data.favoriteItems
+                                    .filter { it.filterPost(query) }
+                            )
+                        )
+                    )
                 }
             }
-            .launchIn(viewModelScope)
+        }.launchIn(viewModelScope)
     }
 
     private fun submitQueryToState(query: String) {
