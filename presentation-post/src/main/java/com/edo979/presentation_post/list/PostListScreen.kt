@@ -85,7 +85,9 @@ fun PostListScreen(
             .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(top = 32.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SearchBar(searchQuery = searchQuery, onAction = onAction)
+        SearchBar(
+            searchQuery = searchQuery,
+            onSearchQueryChange = { onAction(PostListUiAction.SearchQueryChanged(it)) })
 
         Surface(
             modifier = Modifier

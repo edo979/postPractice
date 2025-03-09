@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
@@ -23,6 +25,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
@@ -60,7 +65,9 @@ fun PostList(posts: List<PostListItemModel>, onAction: (PostListUiAction) -> Uni
 }
 
 @Composable
-fun SearchBar(searchQuery: String, onAction: (PostListUiAction) -> Unit) {
+fun SearchBar(searchQuery: String, onSearchQueryChange: (String) -> Unit) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
@@ -71,17 +78,21 @@ fun SearchBar(searchQuery: String, onAction: (PostListUiAction) -> Unit) {
             .minimumInteractiveComponentSize(),
         shape = RoundedCornerShape(100),
         singleLine = true,
+        keyboardActions = KeyboardActions(onSearch = { keyboardController?.hide() }),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text, imeAction = ImeAction.Search
+        ),
         leadingIcon = {
             Icon(imageVector = Icons.Default.Search, contentDescription = null)
         },
         trailingIcon = {
-            AnimatedVisibility(visible = true) { // TODO: not visible is string empty!
-                IconButton(onClick = {}) {
+            AnimatedVisibility(visible = searchQuery.isNotBlank()) {
+                IconButton(onClick = { onSearchQueryChange("") }) {
                     Icon(imageVector = Icons.Default.Clear, contentDescription = null)
                 }
             }
         },
         value = searchQuery,
-        onValueChange = { onAction(PostListUiAction.SearchQueryChanged(it)) }
+        onValueChange = onSearchQueryChange
     )
 }
