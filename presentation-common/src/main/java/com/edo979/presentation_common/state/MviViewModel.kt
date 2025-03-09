@@ -1,6 +1,5 @@
 package com.edo979.presentation_common.state
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
