@@ -12,7 +12,12 @@ import com.edo979.presentation_post.single.PostScreen
 private val postListState = PostListModel(
     items = (1..3).map {
         PostListItemModel(
-            id = it.toLong(), userId = 1L, author = "author$it", title = "title$it"
+            id = it.toLong(),
+            userId = 1L,
+            author = "author$it",
+            title = "title$it",
+            body = "body$it",
+            authorUserName = "username$it"
         )
     })
 

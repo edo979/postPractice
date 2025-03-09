@@ -4,7 +4,9 @@ data class PostListItemModel(
     val id: Long,
     val userId: Long,
     val author: String,
-    val title: String
+    val authorUserName: String,
+    val title: String,
+    val body: String
 )
 
 data class PostListModel(

@@ -1,6 +1,5 @@
 package com.edo979.presentation_post.list
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.edo979.domain.usecase.GetPostsWithUsersUseCase
@@ -13,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -52,7 +52,7 @@ class PostListViewModel @Inject constructor(
             )
 
             is PostListUiAction.TabIndexChanged -> tabIndex = action.index
-            is PostListUiAction.SearchQueryChanged -> searchPosts(action.query)
+            is PostListUiAction.SearchQueryChanged -> submitQueryToState(action.query)
         }
     }
 
@@ -68,13 +68,21 @@ class PostListViewModel @Inject constructor(
     }
 
     private fun searchPosts(query: String) {
-        Log.d("searchQ", query)
+        if (uiStateFlow.value !is UiState.Success) return
 
-        // TODO: check if is the state success
+        val currentState = (uiStateFlow.value as UiState.Success).data
+        val filterFunc: (PostListItemModel) -> Boolean = {
+            it.title.contains(query, ignoreCase = true) || it.body.contains(
+                query, ignoreCase = true
+            )
+        }
+
         submitState(
             UiState.Success(
-                data = (uiStateFlow.value as UiState.Success).data.copy(
-                    searchQuery = query
+                data = currentState.copy(
+                    searchQuery = query,
+                    items = cachedSuccessState.data.items.filter(filterFunc),
+                    favoriteItems = cachedSuccessState.data.favoriteItems.filter(filterFunc)
                 )
             )
         )
@@ -83,10 +91,14 @@ class PostListViewModel @Inject constructor(
 
     @OptIn(FlowPreview::class)
     private fun observeSearchQuery() {
-        if (uiStateFlow.value is UiState.Success) {
-            uiStateFlow.map {
+        uiStateFlow
+            .filter { it is UiState.Success }
+            .map {
                 (it as UiState.Success).data.searchQuery
-            }.distinctUntilChanged().debounce(500L).onEach { query ->
+            }
+            .distinctUntilChanged()
+            .debounce(500L)
+            .onEach { query ->
                 when {
                     query.isBlank() -> {
                         submitState(cachedSuccessState)
@@ -96,7 +108,21 @@ class PostListViewModel @Inject constructor(
                         searchPosts(query)
                     }
                 }
-            }.launchIn(viewModelScope)
-        }
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun submitQueryToState(query: String) {
+        if (uiStateFlow.value !is UiState.Success) return
+
+        val currentState = (uiStateFlow.value as UiState.Success).data
+
+        submitState(
+            UiState.Success(
+                data = currentState.copy(
+                    searchQuery = query
+                )
+            )
+        )
     }
 }

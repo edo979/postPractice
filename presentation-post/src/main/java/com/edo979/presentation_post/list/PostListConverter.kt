@@ -14,7 +14,9 @@ class PostListConverter @Inject constructor() :
                     id = it.post.id,
                     userId = it.post.userId,
                     author = it.user.name,
-                    title = it.post.title
+                    title = it.post.title,
+                    body = it.post.body,
+                    authorUserName = it.user.username
                 )
             },
             favoriteItems = data.favoritePosts.map {
@@ -22,7 +24,9 @@ class PostListConverter @Inject constructor() :
                     id = it.post.id,
                     userId = it.post.userId,
                     author = it.user.name,
-                    title = it.post.title
+                    title = it.post.title,
+                    body = it.post.body,
+                    authorUserName = it.user.username
                 )
             }
         )

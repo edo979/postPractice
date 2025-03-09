@@ -1,5 +1,6 @@
 package com.edo979.presentation_common.state
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 abstract class MviViewModel<T : Any, S : UiState<T>, A : UiAction, E : UiSingleEvent> :
@@ -48,10 +50,9 @@ abstract class MviViewModel<T : Any, S : UiState<T>, A : UiAction, E : UiSingleE
     }
 
     fun submitState(state: S) {
-        viewModelScope.launch {
-            _uiStateFlow.value = state
-        }
+        _uiStateFlow.update { state }
     }
+
 
     fun submitSingleEvent(event: E) {
         viewModelScope.launch {
