@@ -17,7 +17,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.edo979.cleanapp.PostAppTestRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
 
     buildTypes {
@@ -38,6 +39,9 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 }
 
@@ -65,9 +69,23 @@ dependencies {
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.ui.test.junit4)
+
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.idling.resource)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+
+    androidTestImplementation(libs.androidx.core)
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.rules)
+
+    androidTestUtil(libs.androidx.orchestrator)
+
+    kspAndroidTest(libs.hilt.android.compiler)
+    androidTestImplementation(libs.hilt.android.testing)
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
