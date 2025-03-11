@@ -6,7 +6,7 @@ import com.edo979.postpractice.idling.ComposeCountingIdlingResource
 import com.edo979.postpractice.idling.attachIdling
 import kotlinx.coroutines.flow.Flow
 
-class IdlingRemoteUser(
+class IdlingRemoteUserRepository(
     private val remoteUserRepository: UserRepository,
     private val countingIdlingResource: ComposeCountingIdlingResource
 ) : UserRepository {

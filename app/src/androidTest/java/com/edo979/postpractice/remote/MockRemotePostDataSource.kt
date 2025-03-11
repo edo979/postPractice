@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
-class MockRemoteDataSource @Inject constructor() : RemotePostDataSource {
+class MockRemotePostDataSource @Inject constructor() : RemotePostDataSource {
 
     private val posts = listOf(
         Post(
