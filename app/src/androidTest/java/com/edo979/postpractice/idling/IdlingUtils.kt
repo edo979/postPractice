@@ -1,8 +1,11 @@
 package com.edo979.postpractice.idling
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.transform
 
 fun <T> Flow<T>.attachIdling(countingIdlingResource: ComposeCountingIdlingResource): Flow<T> =
-    onStart { countingIdlingResource.increment() }.onEach { countingIdlingResource.decrement() }
+    transform {
+        countingIdlingResource.increment()
+        emit(it)
+        countingIdlingResource.decrement()
+    }
