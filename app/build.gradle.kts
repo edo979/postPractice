@@ -17,7 +17,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "com.edo979.cleanapp.PostAppTestRunner"
+        testInstrumentationRunner = "com.edo979.postpractice.PostAppTestRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
 

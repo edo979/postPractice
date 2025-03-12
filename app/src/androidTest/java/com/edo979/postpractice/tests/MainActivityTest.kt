@@ -1,6 +1,8 @@
 package com.edo979.postpractice.tests
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import com.edo979.data_local.db.post.PostDao
 import com.edo979.postpractice.MainActivity
 import com.edo979.postpractice.idling.ComposeCountingIdlingResource
@@ -10,6 +12,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 import javax.inject.Inject
 
 @HiltAndroidTest
@@ -39,5 +42,10 @@ class MainActivityTest {
     @After
     fun tearDown() {
         composeTestRule.unregisterIdlingResource(idlingResource)
+    }
+
+    @Test
+    fun testDisplayList() {
+        composeTestRule.onNodeWithText("title1").assertIsDisplayed()
     }
 }

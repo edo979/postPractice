@@ -18,7 +18,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import jakarta.inject.Singleton
+import javax.inject.Singleton
+
 
 @Module
 @TestInstallIn(
