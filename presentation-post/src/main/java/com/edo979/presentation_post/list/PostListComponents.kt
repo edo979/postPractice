@@ -26,6 +26,7 @@ import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,7 +37,8 @@ fun PostList(posts: List<PostListItemModel>, onAction: (PostListUiAction) -> Uni
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 12.dp),
+            .padding(horizontal = 12.dp)
+            .testTag("postList"),
         verticalArrangement = Arrangement.Top
     ) {
         items(items = posts, key = { it.id }) { item ->
@@ -75,7 +77,8 @@ fun SearchBar(searchQuery: String, onSearchQueryChange: (String) -> Unit) {
             .background(
                 color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(100)
             )
-            .minimumInteractiveComponentSize(),
+            .minimumInteractiveComponentSize()
+            .testTag("searchBar"),
         shape = RoundedCornerShape(100),
         singleLine = true,
         keyboardActions = KeyboardActions(onSearch = { keyboardController?.hide() }),

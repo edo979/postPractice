@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -103,6 +104,7 @@ fun PostListScreen(
                     modifier = Modifier
                         .padding(vertical = 12.dp)
                         .fillMaxWidth()
+                        .testTag("tabRow")
                 ) {
 
                     Tab(
@@ -110,7 +112,8 @@ fun PostListScreen(
                         onClick = { tabIndex = 0 },
                         modifier = Modifier
                             .weight(1f)
-                            .padding(vertical = 12.dp),
+                            .padding(vertical = 12.dp)
+                            .testTag("tab0"),
                     ) {
                         Text(
                             text = "New Posts",
@@ -121,7 +124,9 @@ fun PostListScreen(
                     Tab(
                         selected = pagerState.currentPage == 1,
                         onClick = { tabIndex = 1 },
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f)
+                            .testTag("tab1"),
                     ) {
                         Text(
                             text = "Favorite Posts",
@@ -136,6 +141,7 @@ fun PostListScreen(
                     state = pagerState, modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
+                        .testTag("postListPager")
                 ) { pageIndex ->
                     Box(modifier = Modifier.fillMaxSize()) {
                         when (pageIndex) {
