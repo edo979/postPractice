@@ -1,13 +1,10 @@
 package com.edo979.postpractice.tests
 
-import android.util.Log
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
-import androidx.compose.ui.test.hasContentDescriptionExactly
-import androidx.compose.ui.test.isDisplayed
-import androidx.compose.ui.test.isNotDisplayed
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
@@ -25,6 +22,7 @@ import com.edo979.postpractice.MainActivity
 import com.edo979.postpractice.idling.ComposeCountingIdlingResource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -117,15 +115,24 @@ class MainActivityTest {
     }
 
     @Test
-    fun testFavoritePosts() {
+    fun testAddFavoritePost() {
         composeTestRule.onNodeWithTag("postList").onChildren().onFirst().performClick()
-        composeTestRule.onNodeWithText("name1: author").assertIsDisplayed()
-//        composeTestRule.onNode(hasContentDescriptionExactly("Heart icon")).isDisplayed()
-//        composeTestRule.onNode(hasContentDescriptionExactly("Border heart icon")).isNotDisplayed()
+        composeTestRule.onNodeWithText("name1").assertIsDisplayed()
+        composeTestRule.onNodeWithText(": author").assertIsDisplayed()
+        composeTestRule.onNodeWithText("email1").assertIsDisplayed()
+        composeTestRule.onNodeWithText(": email").assertIsDisplayed()
+        composeTestRule.onNodeWithText("body1").assertIsDisplayed()
+        composeTestRule.onNode(hasContentDescription("Border heart icon")).assertIsDisplayed()
+        composeTestRule.onNode(hasContentDescription("Heart icon")).assertDoesNotExist()
 
-//        composeTestRule.onNodeWithTag("favoriteButton").performClick()
-//
-//        composeTestRule.onNode(hasContentDescriptionExactly("Heart icon")).isNotDisplayed()
-//        composeTestRule.onNode(hasContentDescriptionExactly("Border heart icon")).isDisplayed()
+        composeTestRule.onNodeWithTag("favoriteButton").performClick()
+
+        // wait for the favorite action to complete, because it's a hot flow
+        runBlocking(Dispatchers.IO) {
+            delay(1000L)
+        }
+
+        composeTestRule.onNode(hasContentDescription("Border heart icon")).assertDoesNotExist()
+        composeTestRule.onNode(hasContentDescription("Heart icon")).assertIsDisplayed()
     }
 }

@@ -85,7 +85,9 @@ fun PostScreen(post: PostModel, toggleFavoritePost: (PostUiAction) -> Unit) {
             )
             Spacer(modifier = Modifier.weight(0.05f))
             IconButton(
-                modifier = Modifier.wrapContentWidth(Alignment.End).testTag("favoriteButton"),
+                modifier = Modifier
+                    .wrapContentWidth(Alignment.End)
+                    .testTag("favoriteButton"),
                 onClick = {
                     when (post.isFavorite) {
                         true -> toggleFavoritePost(PostUiAction.DeleteFromFavorites(post))
@@ -93,17 +95,23 @@ fun PostScreen(post: PostModel, toggleFavoritePost: (PostUiAction) -> Unit) {
                     }
                 }) {
                 when (post.isFavorite) {
-                    true -> Icon(imageVector = Icons.Default.Favorite, contentDescription = "Heart icon")
+                    true -> Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = "Heart icon",
+                        modifier = Modifier.testTag("Heart icon")
+                    )
+
                     false -> Icon(
                         imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "Border heart icon"
+                        contentDescription = "Border heart icon",
+                        modifier = Modifier.testTag("Border heart icon")
                     )
                 }
             }
         }
 
         Text(
-            text = "Single ${post.body}",
+            text = post.body,
             style = MaterialTheme.typography.bodyLarge
         )
     }
