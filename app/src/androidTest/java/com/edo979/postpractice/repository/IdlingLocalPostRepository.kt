@@ -1,5 +1,6 @@
 package com.edo979.postpractice.repository
 
+import android.util.Log
 import com.edo979.domain.entity.PostWithUser
 import com.edo979.domain.repository.FavoritePostRepository
 import com.edo979.postpractice.idling.ComposeCountingIdlingResource
@@ -16,10 +17,18 @@ class IdlingLocalPostRepository(
         localPostRepository.getPosts().attachIdling(countingIdlingResource)
 
     override fun getPost(id: Long): Flow<PostWithUser?> =
-        localPostRepository.getPost(id).attachIdling(countingIdlingResource)
+        try {
+            Log.d("CountingIdlingResource", "GET local post $id")
+            countingIdlingResource.increment()
+            localPostRepository.getPost(id)
+        } finally {
+            Log.d("CountingIdlingResource", "decrement local getPost")
+            countingIdlingResource.decrement()
+        }
 
     override fun addPost(post: PostWithUser): Flow<Unit> = flow {
         try {
+            Log.d("CountingIdlingResource", "try ADD post")
             countingIdlingResource.increment()
             localPostRepository.addPost(post)
             emit(Unit)

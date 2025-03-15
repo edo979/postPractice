@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 
 class GetPostUseCase(
     configuration: Configuration,
@@ -24,15 +23,20 @@ class GetPostUseCase(
     override fun process(request: Request): Flow<Response> =
         favoritePostRepository.getPost(request.postId).flatMapLatest { favoritePost ->
             when (favoritePost) {
-                null -> postRepository.getPost(request.postId).map { remotePost ->
-                    Response(
-                        PostWithData(
-                            post = remotePost,
-                            user = userRepository.getUser(remotePost.userId).first(),
-                            isFavorite = false
+                null -> {
+                    val remotePost = postRepository.getPost(request.postId).first()
+                    val user = userRepository.getUser(remotePost.userId).first()
+                    flowOf(
+                        Response(
+                            PostWithData(
+                                post = remotePost,
+                                user = user,
+                                isFavorite = false
+                            )
                         )
                     )
                 }
+
 
                 else -> flowOf(
                     Response(

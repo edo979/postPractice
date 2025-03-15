@@ -27,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.edo979.presentation_common.state.CommonScreen
 
@@ -63,7 +64,7 @@ fun PostScreen(post: PostModel, toggleFavoritePost: (PostUiAction) -> Unit) {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Single ${post.title}",
+                text = post.title,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.End),
@@ -84,7 +85,7 @@ fun PostScreen(post: PostModel, toggleFavoritePost: (PostUiAction) -> Unit) {
             )
             Spacer(modifier = Modifier.weight(0.05f))
             IconButton(
-                modifier = Modifier.wrapContentWidth(Alignment.End),
+                modifier = Modifier.wrapContentWidth(Alignment.End).testTag("favoriteButton"),
                 onClick = {
                     when (post.isFavorite) {
                         true -> toggleFavoritePost(PostUiAction.DeleteFromFavorites(post))
@@ -92,10 +93,10 @@ fun PostScreen(post: PostModel, toggleFavoritePost: (PostUiAction) -> Unit) {
                     }
                 }) {
                 when (post.isFavorite) {
-                    true -> Icon(imageVector = Icons.Default.Favorite, contentDescription = null)
+                    true -> Icon(imageVector = Icons.Default.Favorite, contentDescription = "Heart icon")
                     false -> Icon(
                         imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = null
+                        contentDescription = "Border heart icon"
                     )
                 }
             }
@@ -109,7 +110,7 @@ fun PostScreen(post: PostModel, toggleFavoritePost: (PostUiAction) -> Unit) {
 }
 
 @Composable
-fun PostHeaderRow(data: String, value: String) {
+fun PostHeaderRow(rowTitle: String, value: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End,
@@ -119,6 +120,6 @@ fun PostHeaderRow(data: String, value: String) {
             text = value, style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.width(12.dp))
-        Text(text = data, style = MaterialTheme.typography.titleMedium)
+        Text(text = rowTitle, style = MaterialTheme.typography.titleMedium)
     }
 }

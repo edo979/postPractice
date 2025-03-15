@@ -1,14 +1,20 @@
 package com.edo979.postpractice.tests
 
+import android.util.Log
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.hasContentDescriptionExactly
+import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
@@ -108,5 +114,18 @@ class MainActivityTest {
             composeTestRule.awaitIdle()
             composeTestRule.onNodeWithTag("postList").onChildren().assertCountEquals(4)
         }
+    }
+
+    @Test
+    fun testFavoritePosts() {
+        composeTestRule.onNodeWithTag("postList").onChildren().onFirst().performClick()
+        composeTestRule.onNodeWithText("name1: author").assertIsDisplayed()
+//        composeTestRule.onNode(hasContentDescriptionExactly("Heart icon")).isDisplayed()
+//        composeTestRule.onNode(hasContentDescriptionExactly("Border heart icon")).isNotDisplayed()
+
+//        composeTestRule.onNodeWithTag("favoriteButton").performClick()
+//
+//        composeTestRule.onNode(hasContentDescriptionExactly("Heart icon")).isNotDisplayed()
+//        composeTestRule.onNode(hasContentDescriptionExactly("Border heart icon")).isDisplayed()
     }
 }
